@@ -138,11 +138,12 @@ a{color:inherit;text-decoration:none}
   .topbar .tb-logo{background:var(--surface);border-radius:var(--radius-sm);padding:8px 14px;display:inline-flex;flex:0 0 auto}
   .topbar .tb-logo img{height:32px;width:auto;display:block}
   .topbar .tb-contact{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:3px;height:32px;font-family:var(--font-mono)}
-  .topbar .tb-contact a{font-size:.62rem;line-height:1.3;color:#fff;white-space:nowrap}
+  .topbar .tb-contact a{font-size:.71rem;line-height:1.3;color:#fff;white-space:nowrap}
   .topbar .tb-nav{display:flex;gap:8px;background:var(--charcoal);padding:8px 10px}
   .topbar .tb-nav a{flex:1;text-align:center;font-family:var(--font-display);font-weight:600;font-size:.72rem;color:#fff;white-space:nowrap;
-    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:var(--radius-sm);padding:9px 4px;}
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:var(--radius-sm);padding:7px 4px;}
   .topbar .tb-nav a:active{background:rgba(255,255,255,.2)}
+  .topbar .tb-nav a.active{background:var(--highlight);border-color:var(--highlight);color:#fff}
   .hero{padding:var(--space-5) var(--space-4); min-height:0; display:block}
 
   /* ---------- Hero: single vertical white box on mobile ----------
@@ -171,7 +172,7 @@ a{color:inherit;text-decoration:none}
   .frame-cluster .fc1:hover{ transform:none; }
   .frame-cluster .photo-frame--labeled .cap{ font-size:.8rem; text-align:center; }
   .frame-cluster .fc1 .reel-play::before{ width:56px; height:56px; }
-  .frame-cluster .fc2{ width:88%; transform:rotate(-2deg); z-index:1; margin:-18px auto 0; }
+  .frame-cluster .fc2{ width:88%; transform:rotate(-2deg); z-index:1; margin:-4px auto 0; }
   .frame-cluster .fc2:hover{ transform:rotate(-2deg); }
   .frame-cluster .fc3{ display:none; }
 }
@@ -226,8 +227,7 @@ a{color:inherit;text-decoration:none}
   #portfolio{ scroll-margin-top:60px; }
 }
 @media(max-width:680px){
-  .work-wall{ grid-template-columns:repeat(2,1fr); gap:var(--space-3); }
-  .work-tile{ width:80%; margin:0 auto; }
+  .work-wall{ grid-template-columns:repeat(2,1fr); gap:8px; }
 }
 
 /* ---------- Tabs (Motion / Case Studies) ---------- */
@@ -1647,23 +1647,23 @@ document.querySelectorAll('.frame-cluster .slides').forEach((s, si) => {
 // ---------- Side-nav scroll spy (highlights the section you're viewing) ----------
 (function(){
   const links = {};
-  document.querySelectorAll('.navlist a').forEach(a=>{
+  document.querySelectorAll('.navlist a, .tb-nav a').forEach(a=>{
     const id = (a.getAttribute('href')||'').replace('#','');
-    if(id) links[id] = a;
+    if(id){ (links[id] = links[id]||[]).push(a); }
   });
   const ids = Object.keys(links);
   const sections = ids.map(id=>document.getElementById(id)).filter(Boolean);
   if(!sections.length) return;
   function setActive(id){
-    ids.forEach(k=>links[k].classList.remove('active'));
-    if(links[id]) links[id].classList.add('active');
+    ids.forEach(k=>links[k].forEach(a=>a.classList.remove('active')));
+    if(links[id]) links[id].forEach(a=>a.classList.add('active'));
   }
   const io = new IntersectionObserver(entries=>{
     entries.forEach(e=>{ if(e.isIntersecting) setActive(e.target.id); });
   }, { rootMargin:'-35% 0px -55% 0px', threshold:0 });
   sections.forEach(s=>io.observe(s));
   // instant feedback on click; the observer settles it after the smooth scroll
-  Object.values(links).forEach(a=>a.addEventListener('click',()=>{
+  Object.values(links).flat().forEach(a=>a.addEventListener('click',()=>{
     setActive((a.getAttribute('href')||'').replace('#',''));
   }));
 })();
