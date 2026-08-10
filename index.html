@@ -1453,8 +1453,13 @@ document.querySelectorAll('.frame-cluster .slides').forEach((s, si) => {
   function sizeFrame(tile){
     const parts = (tile.getAttribute('data-ar') || '16/9').split('/').map(Number);
     const ratio = (parts[0] && parts[1]) ? parts[0] / parts[1] : 16/9;
-    const maxW = Math.min(1100, window.innerWidth * 0.96);
-    const maxH = window.innerHeight * 0.86;
+    // use the lightbox's own padding (varies by breakpoint) so the frame never exceeds
+    // the space actually available inside it, instead of a fixed 96vw guess
+    const cs = window.getComputedStyle(lb);
+    const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+    const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    const maxW = Math.min(1100, window.innerWidth - padX);
+    const maxH = window.innerHeight - padY;
     let w = maxW, h = w / ratio;
     if(h > maxH){ h = maxH; w = h * ratio; }
     frame.style.aspectRatio = 'auto';
@@ -1676,6 +1681,24 @@ document.querySelectorAll('.frame-cluster .slides').forEach((s, si) => {
   Object.values(links).flat().forEach(a=>a.addEventListener('click',()=>{
     setActive((a.getAttribute('href')||'').replace('#',''));
   }));
+})();
+
+// ---------- Mobile-only copy adjustments (desktop text is untouched) ----------
+(function(){
+  if (window.innerWidth > 860) return;
+  const intro = document.querySelector('.intro-body');
+  if(intro){
+    intro.innerHTML = intro.innerHTML.replace(
+      'My reel’s over on the right, and there’s more of my work and code just below.',
+      'My reel’s below, and there’s more of my work and code just under it.'
+    );
+  }
+  const lede = document.querySelector('.swap-lede');
+  if(lede){
+    const mobileMotion = 'A selection of my motion design and direction work.';
+    lede.dataset.motion = mobileMotion;             // keeps the shortened text after Motion/Case tab swaps too
+    if(lede.textContent.indexOf('Hover') !== -1) lede.textContent = mobileMotion;
+  }
 })();
 </script>
 
