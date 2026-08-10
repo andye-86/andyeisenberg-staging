@@ -1,0 +1,69 @@
+/* ===================================================================
+   Andy Eisenberg — Design Tokens v0.2
+   Shift from v0.1: cool neutral shell (was warm cream), featured soft
+   elevation (was flat/papery), brand palette pulled from the AME logo
+   (5 colors) used as an accent SET, rounder geometric display type.
+   =================================================================== */
+
+:root {
+  /* --- Brand palette (from ColorLogo_RGB.eps) --- */
+  --yellow:   #EDD839;
+  --magenta:  #CC1E66;
+  --cobalt:   #04549C;
+  --grey:     #797C7A;
+  --charcoal: #141414;
+
+  /* --- Cool neutral shell --- */
+  --bg-page:    #EAECEF;   /* cool light grey, the dotted ground */
+  --bg-page-2:  #E2E5E9;   /* slightly deeper cool grey for banding */
+  --surface:    #FFFFFF;   /* white floating cards */
+  --dot:        rgba(20,20,20,0.10); /* background dot color */
+
+  /* --- Semantic roles --- */
+  --text-primary:    var(--charcoal);
+  --text-secondary:  var(--grey);
+  --border-hairline: #D7DBDF;
+  --interactive:       var(--cobalt);   /* links, active nav */
+  --interactive-hover: #06407a;         /* darker cobalt */
+  --highlight:         var(--magenta);  /* emphasis, key marks */
+
+  /* Accent rotation for work categories / marks */
+  --accent-1: var(--yellow);
+  --accent-2: var(--magenta);
+  --accent-3: var(--cobalt);
+  --accent-4: var(--grey);
+  --accent-5: var(--charcoal);
+
+  /* --- Type --- */
+  --font-display: "Hanken Grotesk", system-ui, sans-serif; /* rounder geometric */
+  --font-body:    "Inter", system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+
+  --text-xs: 0.75rem;  --text-sm: 0.875rem; --text-base: 1rem;
+  --text-md: 1.125rem; --text-lg: 1.5rem;   --text-xl: 2rem;
+  --text-2xl: 2.75rem; --text-3xl: 3.75rem; --text-4xl: 5rem;
+
+  --leading-tight: 1.08; --leading-body: 1.6;
+  --tracking-tight: -0.03em; --tracking-label: 0.14em;
+
+  /* --- Spacing (8px base) --- */
+  --space-1:4px;  --space-2:8px;  --space-3:12px; --space-4:16px; --space-5:24px;
+  --space-6:32px; --space-7:48px; --space-8:64px; --space-9:96px; --space-10:128px;
+
+  /* --- Corners --- */
+  --radius-sm:8px; --radius-md:16px; --radius-lg:24px; --radius-pill:999px;
+
+  /* --- Featured elevation (the drop shadow you liked) --- */
+  --shadow-card:  0 2px 4px rgba(20,20,20,0.04), 0 14px 34px rgba(20,20,20,0.10);
+  --shadow-lift:  0 6px 12px rgba(20,20,20,0.06), 0 24px 56px rgba(20,20,20,0.16);
+  --shadow-frame: 0 0 20px rgba(20,20,20,0.20);  /* soft, even matte-print shadow for photo frames */
+  --shadow-inset: inset 0 0 8px rgba(20,20,20,0.22);  /* slight inner shadow: image sits recessed into its matte */
+
+  /* --- Motion --- */
+  --duration-fast:150ms; --duration-base:250ms; --duration-slow:450ms;
+  --ease-standard: cubic-bezier(.2,0,0,1);
+  --ease-entrance: cubic-bezier(0,0,0,1);
+
+  /* --- Layout --- */
+  --content-max:1200px; --measure:66ch; --nav-w:240px;
+}

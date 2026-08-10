@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andy Eisenberg | Creative Technologist | Motion + Code</title>
+<meta name="description" content="Andy Eisenberg, Creative Technologist and motion designer. Motion design and code, together on purpose.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- Single source of truth -->
+<link rel="stylesheet" href="design-tokens_v0.2.css">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body); color:var(--text-primary); background:var(--bg-page);
+  background-image:radial-gradient(var(--dot) 1.3px, transparent 1.3px);
+  background-size:22px 22px; line-height:var(--leading-body); -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+
+/* ---------- Side nav ---------- */
+.sidenav{
+  position:fixed; top:0; left:0; width:var(--nav-w); height:100vh;
+  padding:28px 22px; display:flex; flex-direction:column; gap:var(--space-2); z-index:50;
+  border-right:1px solid rgba(0,0,0,.10); background:var(--grey);
+}
+.sidenav .brand{aspect-ratio:1.49;display:flex;align-items:center;justify-content:center;margin-bottom:32px;padding:12px 16px;background:var(--surface);border-radius:var(--radius-md);box-shadow:var(--shadow-card)}
+.sidenav .brand img{height:auto;width:auto;max-height:100%;max-width:72%;display:block}
+.navlist{display:flex;flex-direction:column;gap:2px;flex:1}
+.navlist a{
+  display:flex;align-items:baseline;gap:10px;padding:10px 13px;border-radius:var(--radius-sm);
+  font-family:var(--font-display);font-weight:600;font-size:var(--text-base);color:#fff;
+  transition:background var(--duration-fast) var(--ease-standard),color var(--duration-fast) var(--ease-standard);
+}
+.navlist a .idx{font-family:var(--font-mono);font-size:.66rem;color:rgba(255,255,255,.6);letter-spacing:.1em}
+.navlist a:hover{background:rgba(255,255,255,.16)}
+.navlist a.active{background:#fff;color:var(--charcoal)}
+.navlist a.active .idx{color:var(--highlight)}
+.avail{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:.66rem;letter-spacing:.08em;color:rgba(255,255,255,.85);text-transform:uppercase}
+.avail .dot{width:8px;height:8px;border-radius:50%;background:#5fe0a6;box-shadow:0 0 0 4px rgba(95,224,166,.22)}
+.nav-contact{display:flex;flex-direction:column;gap:8px;font-family:var(--font-mono);font-size:.768rem;letter-spacing:.02em;background:var(--surface);border-radius:var(--radius-md);padding:16px 14px;box-shadow:var(--shadow-card);}
+.nav-contact a{color:var(--charcoal);transition:color var(--duration-fast) var(--ease-standard);white-space:nowrap;}
+.nav-contact a:hover{color:var(--highlight)}
+
+.topbar{display:none}
+
+/* ---------- Main ---------- */
+.main{margin-left:var(--nav-w)}
+.hero{padding:var(--space-8); min-height:66vh; display:flex; align-items:flex-start; justify-content:center}
+
+/* ---------- Hero stage: ONE fixed-size component, centered ----------
+   Fixed width (does NOT scale with the window); it just centers itself
+   in the viewport. Internal layout still uses container units, so the
+   card, headline, body and frames hold their proportions to each other. */
+.hero-stage{
+  position:relative;
+  width:1200px; max-width:100%;
+  aspect-ratio:16 / 9;
+  container-type:inline-size;
+  margin:0 auto;
+}
+
+.intro-card{
+  position:absolute; left:0; top:50%; transform:translateY(-50%); z-index:0;   /* behind frames, vertically centered; height fits content so buttons stay on the box */
+  width:calc(63% + 400px);
+  background:var(--surface); border-radius:var(--radius-lg); box-shadow:var(--shadow-card);
+  padding:4.5cqw 5cqw; display:flex; flex-direction:column;
+}
+.intro-content{ display:flex; flex-direction:column; transform:translateX(-20px); }  /* text left 20px */
+.intro-card .headline-vector{ transform:translateY(-30px); margin-bottom:-65px; }  /* headline up 30px; pull body+buttons up 65px to close the gap */
+.intro-card .headline-vector svg{ width:100%; max-width:50cqw; height:auto; display:block; }
+.intro-body{
+  font-family:var(--font-body); font-weight:400; font-size:1.35cqw; line-height:1.55;
+  color:var(--text-primary); max-width:calc(34cqw + 40px); margin-top:2.5cqw;
+  transform:translateX(8px);   /* nudge body right 8px to sit centered */
+}
+.intro-body .greeting{ color:var(--highlight); font-weight:700; }
+.hero-cta{ display:flex; gap:1.3cqw; margin-top:3cqw; flex-wrap:wrap; }
+.hero-cta .btn{ font-family:var(--font-display); font-weight:600; font-size:1.19cqw;
+  padding:0.89cqw 1.7cqw; border-radius:var(--radius-pill); display:inline-flex; align-items:center; gap:0.55cqw;
+  cursor:pointer; text-decoration:none;
+  transition:transform var(--duration-fast) var(--ease-standard), background var(--duration-base) var(--ease-standard), color var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard); }
+.hero-cta .btn .arrow{ transition:transform var(--duration-base) var(--ease-standard); }
+.hero-cta .btn:hover .arrow{ transform:translateX(3px); }
+.hero-cta .btn.primary{ background:var(--interactive); color:var(--surface); box-shadow:var(--shadow-card); }
+.hero-cta .btn.primary:hover{ background:var(--interactive-hover); transform:translateY(-2px); box-shadow:var(--shadow-lift); }
+.hero-cta .btn.ghost{ background:transparent; color:var(--interactive); border:1.5px solid var(--interactive); }
+.hero-cta .btn.ghost:hover{ background:var(--interactive); color:var(--surface); }
+
+/* ---------- Frame cluster (angled, fixed proportion) ---------- */
+.frame-cluster{ position:absolute; inset:0; transform:translate(75px, 45px); pointer-events:none; }  /* frames right 75px, down 45px; container ignores mouse so hero buttons stay hoverable */
+.frame-cluster .photo-frame{
+  position:absolute; margin:0; pointer-events:auto;
+  background:var(--surface); border-radius:1.2cqw; box-shadow:var(--shadow-frame);
+  padding:0.9cqw;
+  transition:transform var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard);
+}
+.frame-cluster .photo-frame > img{ display:block; width:100%; height:auto; border-radius:0.7cqw; aspect-ratio:16/9; object-fit:cover; }
+.frame-cluster .photo-frame--labeled{ padding:0.9cqw 0.9cqw 1.4cqw; }
+.frame-cluster .photo-frame--labeled .cap{ font-family:var(--font-mono); font-size:1.15cqw; color:var(--text-primary); margin-top:1cqw; line-height:1.2; }
+/* crossfading stills inside a frame */
+.frame-cluster .photo-frame > .slides{ position:relative; width:100%; aspect-ratio:16/9; border-radius:0.7cqw; overflow:hidden; background:var(--bg-page-2); }
+.frame-cluster .photo-frame > .slides img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity 2.2s var(--ease-standard); }
+.frame-cluster .fc1 > .slides img{ opacity:1; transition-duration:3.2s; }  /* showreel: fade the top image out to reveal the next (already opaque) underneath — no mid-fade wash */
+.frame-cluster .fc1 > .slides img.on{ z-index:2; }                          /* clean first paint before JS takes over */
+.frame-cluster .fc1 > .slides img.reel-hide{ opacity:0; }
+.frame-cluster .photo-frame > .slides img.on{ opacity:1; }
+.frame-cluster .photo-frame > .slides::after{ content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; box-shadow:var(--shadow-inset); }
+
+.fc1{ top:1%;  right:5%;  width:42%;   transform:rotate(2.5deg);  z-index:3; cursor:pointer; }  /* top, largest, labeled (+20%) — front of stack; clickable → showreel lightbox */
+.fc1:focus-visible{ outline:2px solid var(--interactive); outline-offset:4px; }
+/* big centered play badge on the showreel frame (same language as the portfolio play badge, larger + always visible) */
+.fc1 .reel-play{ position:absolute; inset:0; z-index:4; display:flex; align-items:center; justify-content:center; pointer-events:none; }
+.fc1 .reel-play::before{ content:""; width:9cqw; height:9cqw; border-radius:50%;
+  background-color:rgba(255,255,255,.53); backdrop-filter:blur(2px);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='22' viewBox='0 0 20 22'%3E%3Cpath d='M0 0l20 11L0 22z' fill='%23141414'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:57% 50%; background-size:34%;
+  box-shadow:0 6px 20px rgba(0,0,0,.35);
+  transition:transform var(--duration-base) var(--ease-standard), background-color var(--duration-base) var(--ease-standard); }
+.fc1:hover .reel-play::before{ transform:scale(1.08); background-color:rgba(255,255,255,1); }
+.fc2{ top:46%; right:27%; width:29.4%; transform:rotate(-3.5deg); z-index:1; }  /* middle (+40%) */
+.fc3{ top:calc(63% + 15px); right:calc(11% - 22px); width:23.4%; transform:rotate(3.5deg);  z-index:0; }  /* lowest (+30%) */
+
+.fc1:hover{ transform:rotate(2.5deg)  translateY(-1.3%); box-shadow:0 0 30px rgba(20,20,20,0.26); }
+.fc2:hover{ transform:rotate(-3.5deg) translateY(-1.3%); box-shadow:0 0 30px rgba(20,20,20,0.26); }
+.fc3:hover{ transform:rotate(3.5deg)  translateY(-1.3%); box-shadow:0 0 30px rgba(20,20,20,0.26); }
+
+/* ---------- Responsive: nav collapses; hero stays one scaling unit ---------- */
+@media(max-width:860px){
+  .sidenav{display:none}
+  .main{margin-left:0}
+  .topbar{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;padding:12px 18px;background:var(--grey);border-bottom:1px solid rgba(0,0,0,.1)}
+  .topbar .tb-logo{background:var(--surface);border-radius:var(--radius-sm);padding:5px 9px;display:inline-flex}
+  .topbar .tb-logo img{height:16px;width:auto;display:block}
+  .topbar .avail{font-size:.6rem;color:rgba(255,255,255,.88)}
+  .hero{padding:var(--space-5)}
+}
+
+/* =====================================================================
+   PORTFOLIO  (#portfolio) — asymmetric framed gallery wall + lightbox
+   ===================================================================== */
+.section{ padding:var(--space-10) var(--space-8) var(--space-9); }
+
+/* Portfolio sits on a solid charcoal band — clean break from the home/hero area. */
+#portfolio{
+  background:var(--charcoal);
+}
+#portfolio .section-head h2{ color:var(--surface); }
+#portfolio .section-head .lede{ color:rgba(255,255,255,.62); }
+
+.section-head{ max-width:var(--content-max); margin:0 auto var(--space-8); display:flex; align-items:flex-end; justify-content:space-between; gap:var(--space-3); flex-wrap:wrap; }
+.section-head .eyebrow{ font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--highlight); display:block; margin-bottom:var(--space-3); }
+.section-head h2{ font-family:var(--font-display); font-weight:800; font-size:var(--text-3xl); line-height:var(--leading-tight); letter-spacing:var(--tracking-tight); color:var(--text-primary); }
+.section-head .lede{ font-family:var(--font-body); font-size:var(--text-md); color:var(--text-secondary); max-width:42ch; margin-top:var(--space-2); }
+
+.work-wall{ max-width:var(--content-max); margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-5); }
+.work-tile{ margin:0; cursor:pointer; background:var(--surface); border-radius:var(--radius-md);
+  box-shadow:var(--shadow-card); padding:0.7rem 0.7rem 0; overflow:clip;
+  transition:transform var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard); }
+.work-tile:hover{ transform:translateY(-4px); box-shadow:var(--shadow-lift); }
+.wt-media{ position:relative; border-radius:var(--radius-sm); overflow:hidden; aspect-ratio:16/9; background:var(--bg-page-2); }
+.wt-media .wt-still{ width:100%; height:100%; object-fit:cover; display:block; transition:transform var(--duration-slow) var(--ease-standard); }
+.work-tile:hover .wt-still{ transform:scale(1.04); }
+.wt-media::after{ content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; box-shadow:var(--shadow-inset); }
+.wt-play{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0;
+  transition:opacity var(--duration-base) var(--ease-standard); }
+.wt-play::before{ content:""; width:60px; height:60px; border-radius:50%; background:rgba(20,20,20,.55);
+  backdrop-filter:blur(2px); background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='22' viewBox='0 0 20 22'%3E%3Cpath d='M0 0l20 11L0 22z' fill='white'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:56% 50%; }
+.work-tile:hover .wt-play{ opacity:1; }
+/* hover preview: muted, looping Vimeo background player over the still */
+.wt-preview{ position:absolute; inset:0; width:100%; height:100%; border:0; z-index:2; pointer-events:none;
+  opacity:0; transition:opacity var(--duration-slow) var(--ease-standard); }  /* cross-dissolve from the still */
+.wt-preview.is-in{ opacity:1; }
+/* Caption: client on top line, piece name beneath. Fixed height keeps every card identical. */
+.wt-cap{ display:flex; flex-direction:column; gap:3px; padding:var(--space-3) var(--space-2) 0px; }
+.wt-tag{ font-family:var(--font-mono); font-size:0.68rem; letter-spacing:var(--tracking-label); text-transform:uppercase;
+  color:var(--highlight); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-height:1em; }
+.wt-title{ font-family:var(--font-display); font-weight:700; font-size:var(--text-sm); line-height:1.25; color:var(--text-primary);
+  display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.5em; }
+
+@media(max-width:960px){
+  .section{ padding:var(--space-9) var(--space-6) var(--space-8); }
+  .work-wall{ grid-template-columns:repeat(3,1fr); gap:var(--space-4); }
+  .section-head h2{ font-size:var(--text-2xl); }
+  #portfolio{ scroll-margin-top:60px; }
+}
+@media(max-width:680px){
+  .work-wall{ grid-template-columns:repeat(2,1fr); }
+}
+@media(max-width:440px){
+  .work-wall{ grid-template-columns:1fr; }
+}
+
+/* ---------- Tabs (Motion / Case Studies) ---------- */
+.tabs{ max-width:var(--content-max); margin:0 auto var(--space-7); display:flex; gap:var(--space-6);
+  border-bottom:1px solid rgba(255,255,255,.15); }
+.tab{ appearance:none; background:none; border:0; cursor:pointer; padding:0 0 var(--space-4);
+  font-family:var(--font-display); font-weight:700; font-size:var(--text-lg); line-height:1;
+  color:rgba(255,255,255,.5); position:relative; transition:color var(--duration-base) var(--ease-standard); }
+.tab:hover{ color:rgba(255,255,255,.82); }
+.tab.active{ color:#fff; }
+.tab.active::after{ content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--highlight); }
+
+/* Panels crossfade; heading stays put, only .swap word/lede fade */
+.tab-panel{ opacity:0; transition:opacity var(--duration-base) var(--ease-standard); }
+.tab-panel.active{ opacity:1; }
+.tab-panel.gone{ display:none; }
+.swap{ transition:opacity var(--duration-base) var(--ease-standard); }  /* per-phase duration set in JS */
+.swap.out{ opacity:0; }
+
+/* ---------- Case studies grid (3 across) ---------- */
+.case-wall{ max-width:var(--content-max); margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-6); }
+.case-card{ display:flex; flex-direction:column; background:var(--surface); border-radius:var(--radius-md);
+  box-shadow:var(--shadow-card); overflow:clip; cursor:pointer;
+  transition:transform var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard); }
+.case-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-lift); }
+.cc-media{ position:relative; aspect-ratio:16/9; background:var(--bg-page-2); display:flex; align-items:center; justify-content:center; }
+.cc-media::after{ content:""; position:absolute; inset:0; pointer-events:none; box-shadow:var(--shadow-inset); }
+.cc-ph{ font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--text-secondary); }
+.cc-body{ padding:var(--space-4) var(--space-4) var(--space-5); }
+.cc-title{ font-family:var(--font-display); font-weight:700; font-size:var(--text-md); color:var(--text-primary); }
+.cc-excerpt{ font-family:var(--font-body); font-size:var(--text-sm); line-height:1.5; color:var(--text-secondary); margin-top:var(--space-2);
+  display:-webkit-box; -webkit-line-clamp:3; line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; min-height:4.5em; }
+@media(max-width:960px){ .case-wall{ grid-template-columns:repeat(2,1fr); gap:var(--space-5); } }
+@media(max-width:560px){ .case-wall{ grid-template-columns:1fr; } }
+
+/* Populated case card thumbnail */
+.cc-thumb{ width:100%; height:100%; object-fit:cover; display:block; }
+/* Good Game card: image fills the whole frame, 7deg tilt baked into the crop (scaled so rotation leaves no gaps) */
+.case-card[data-case="good-game-background"] .cc-media{ overflow:hidden; }
+.case-card[data-case="good-game-background"] .cc-thumb{ width:100%; height:100%; object-fit:cover; transform:rotate(7deg) scale(1.22); transition:transform var(--duration-slow) var(--ease-standard); }
+.case-card[data-case="good-game-background"]:hover .cc-thumb{ transform:rotate(7deg) scale(1.28); }
+
+/* ---------- Case study lightbox (addressable via #case/slug) ---------- */
+.case-lb{ position:fixed; inset:0; z-index:110; display:flex; align-items:flex-start; justify-content:center;
+  padding:var(--space-8) var(--space-5); overflow-y:auto; background:rgba(20,20,20,.86);
+  opacity:0; visibility:hidden; transition:opacity var(--duration-base) var(--ease-standard), visibility var(--duration-base) var(--ease-standard); }
+.case-lb.open{ opacity:1; visibility:visible; }
+.case-panel{ position:relative; width:min(820px,100%); margin:auto; background:var(--surface);
+  border-radius:var(--radius-lg); box-shadow:var(--shadow-lift); padding:43px clamp(24px,6vw,72px); }
+.cl-close{ position:fixed; top:22px; right:26px; z-index:120; width:44px; height:44px; border:0; border-radius:50%;
+  background:var(--surface); color:var(--charcoal); font-size:1.5rem; line-height:1; cursor:pointer; box-shadow:var(--shadow-card);
+  transition:transform var(--duration-fast) var(--ease-standard); }
+.cl-close:hover{ transform:scale(1.08); }
+.case-article .cl-eyebrow{ font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--highlight); }
+.case-article .cl-title{ font-family:var(--font-display); font-weight:800; font-size:var(--text-3xl); line-height:var(--leading-tight); letter-spacing:var(--tracking-tight); margin:var(--space-3) 0 var(--space-4); color:var(--text-primary); }
+.cl-topics{ display:flex; flex-wrap:wrap; gap:var(--space-2); margin-bottom:var(--space-6); }
+.cl-topics span{ font-family:var(--font-mono); font-size:0.7rem; letter-spacing:.06em; text-transform:uppercase; color:var(--text-secondary); border:1px solid var(--border-hairline); border-radius:var(--radius-pill); padding:4px 10px; }
+.case-article .cl-lead{ font-family:var(--font-body); font-size:var(--text-md); line-height:1.6; color:var(--text-primary); padding-bottom:var(--space-5); border-bottom:1px solid var(--border-hairline); margin-bottom:var(--space-6); max-width:66ch; text-wrap:balance; }
+.case-article h3{ font-family:var(--font-display); font-weight:700; font-size:var(--text-xl); margin:var(--space-7) 0 var(--space-3); color:var(--text-primary); }
+.case-article h3{ display:flex; align-items:baseline; gap:0.39em; }
+.case-article h3::before{ content:""; flex:0 0 auto; width:7.5px; height:0.78em; background:var(--cobalt); position:relative; top:1px; }
+.case-article h3:nth-of-type(3n+2)::before{ background:var(--yellow); }
+.case-article h3:nth-of-type(3n)::before{ background:var(--magenta); }
+.case-article .cl-footer{ margin-top:29px; padding-top:7px; border-top:2px solid var(--highlight); font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--text-secondary); }
+.case-article .cl-footer .cl-foot-dot{ display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--highlight); margin-right:0.7em; vertical-align:0.06em; }
+.case-article p{ font-family:var(--font-body); font-size:1.02rem; line-height:1.7; color:#2a2a2a; margin:0 0 var(--space-4); max-width:66ch; }
+.case-article ol{ margin:0 0 var(--space-4) var(--space-5); }
+.case-article ul{ margin:0 0 var(--space-4) var(--space-5); }
+.case-article ul ul{ margin:var(--space-2) 0 0 var(--space-6); }
+.case-article li{ font-family:var(--font-body); line-height:1.6; color:#2a2a2a; margin-bottom:var(--space-2); max-width:64ch; }
+.case-article code{ font-family:var(--font-mono); font-size:0.86em; background:var(--bg-page-2); padding:1px 5px; border-radius:5px; }
+.case-article pre{ background:var(--charcoal); color:#eef1f4; border-radius:var(--radius-md); padding:var(--space-5); margin:0 0 var(--space-5); }
+.case-article pre code{ font-family:var(--font-mono); font-size:0.82rem; line-height:1.6; background:none; color:inherit; padding:0;
+  white-space:pre-wrap; overflow-wrap:anywhere; }
+.cl-figure{ margin:0 0 var(--space-5); aspect-ratio:16/9; border-radius:var(--radius-md); background:var(--bg-page-2); display:flex; align-items:center; justify-content:center; position:relative; }
+.cl-figure::after{ content:""; position:absolute; inset:0; pointer-events:none; box-shadow:var(--shadow-inset); border-radius:inherit; }
+.cl-figure span{ font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--text-secondary); }
+.cl-figrow{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-3); margin:0 0 var(--space-5); }
+.cl-shot{ position:relative; display:block; border-radius:var(--radius-sm); overflow:hidden; background:var(--bg-page-2); }
+.cl-shot img{ width:100%; height:100%; object-fit:cover; display:block; aspect-ratio:1/1; }
+.cl-shot::after{ content:""; position:absolute; inset:0; pointer-events:none; box-shadow:var(--shadow-inset); }
+@media(max-width:560px){ .cl-figrow{ grid-template-columns:repeat(2,1fr); } }
+.cl-figrow--3{ grid-template-columns:repeat(3,1fr); }
+.cl-cell{ margin:0; }
+.cl-figrow--inset .cl-shot{ padding:5%; }
+.cl-figrow--inset .cl-shot img{ border-radius:4px; }
+.cl-cell figcaption{ font-family:var(--font-mono); font-size:0.72rem; letter-spacing:.03em; color:var(--text-secondary); margin-top:var(--space-2); text-align:center; }
+.cl-grid2{ display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-3); margin:0 0 var(--space-5); }
+.cl-two{ display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); align-items:center; justify-items:center; margin:0 0 var(--space-5); }
+.cl-two img{ max-width:100%; max-height:440px; width:auto; height:auto; border-radius:var(--radius-sm); display:block; }
+@media(max-width:560px){ .cl-two{ grid-template-columns:1fr; } }
+.cl-grid8{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-2); margin:0 0 var(--space-5); }
+@media(max-width:560px){ .cl-grid8{ grid-template-columns:repeat(2,1fr); } }
+.cl-img{ position:relative; margin:0 0 var(--space-5); border-radius:var(--radius-sm); overflow:hidden; background:var(--bg-page-2); }
+.cl-img img{ width:100%; height:auto; display:block; }
+.cl-img::after{ content:""; position:absolute; inset:0; pointer-events:none; box-shadow:var(--shadow-inset); border-radius:inherit; }
+.cl-empty{ font-family:var(--font-mono); font-size:var(--text-sm); letter-spacing:.06em; text-transform:uppercase; color:var(--text-secondary); padding:var(--space-8) 0; text-align:center; }
+@media(max-width:560px){ .case-article .cl-title{ font-size:var(--text-2xl); } .case-panel{ padding:var(--space-7) var(--space-5); } }
+
+/* ---------- Lightbox ---------- */
+.lightbox{ position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center;
+  padding:var(--space-6); background:rgba(20,20,20,.86); opacity:0; visibility:hidden;
+  transition:opacity var(--duration-base) var(--ease-standard), visibility var(--duration-base) var(--ease-standard); }
+.lightbox.open{ opacity:1; visibility:visible; }
+.lb-stage{ position:relative; width:auto; max-width:100%; }
+/* frame gets explicit width/height from JS per the video's real aspect ratio; these are fallbacks */
+.lb-frame{ position:relative; width:min(1100px,96vw); aspect-ratio:16/9; max-height:86vh; border-radius:var(--radius-md); overflow:hidden;
+  background:#000; box-shadow:var(--shadow-lift); }
+.lb-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+.lb-empty{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center;
+  font-family:var(--font-mono); font-size:var(--text-sm); letter-spacing:var(--tracking-label); text-transform:uppercase;
+  color:rgba(255,255,255,.72); padding:var(--space-6); }
+.lb-close{ position:absolute; top:-14px; right:-14px; z-index:20; width:44px; height:44px; border:0; border-radius:50%;
+  background:var(--surface); color:var(--charcoal); font-size:1.4rem; line-height:1; cursor:pointer; box-shadow:var(--shadow-card);
+  transition:transform var(--duration-fast) var(--ease-standard); }
+.lb-close:hover{ transform:scale(1.08); }
+.lb-title{ margin-top:var(--space-4); font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:var(--tracking-label);
+  text-transform:uppercase; color:rgba(255,255,255,.8); }
+.lb-title b{ color:#fff; font-weight:500; }
+
+/* =====================================================================
+   CODE  (#code) — hand-curated tool / repo cards (no live GitHub API)
+   Reuses .section + .section-head from Portfolio; only the card is new.
+   ===================================================================== */
+.code-wall{ max-width:var(--content-max); margin:0 auto; display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-5); }
+.code-card{ position:relative; display:flex; flex-direction:column; background:var(--surface); border-radius:var(--radius-md);
+  box-shadow:var(--shadow-card); overflow:clip; padding:var(--space-4) var(--space-4) var(--space-3);
+  transition:transform var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard); }
+.code-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-lift); }
+/* corner tick cycles through the brand set (cobalt -> magenta -> yellow) */
+.code-card::before{ content:""; position:absolute; top:0; left:0; width:var(--space-6); height:4px; background:var(--cobalt); border-radius:0 0 var(--radius-sm) 0; }
+.code-card:nth-child(3n+2)::before{ background:var(--magenta); }
+.code-card:nth-child(3n)::before{ background:var(--yellow); }
+
+/* title sits on top of the code block now */
+.code-title{ font-family:var(--font-display); font-weight:700; font-size:var(--text-md); line-height:1.2; color:var(--text-primary); margin:var(--space-1) 0 var(--space-3); }
+
+/* dark snippet strip: instant "this is code" read, reuses the case-article pre language */
+.code-snippet{ background:var(--charcoal); border-radius:var(--radius-sm); padding:var(--space-2) var(--space-3);
+  font-family:var(--font-mono); font-size:0.72rem; line-height:1.5; color:#eef1f4; overflow-x:auto; white-space:nowrap; }
+.code-snippet .tok{ color:#6aa9e0; }                               /* keyword tint, lightened for charcoal bg */
+.code-card:nth-child(3n+2) .code-snippet .tok{ color:#e56aa0; }    /* magenta card */
+.code-card:nth-child(3n) .code-snippet .tok{ color:var(--yellow); }/* yellow card */
+.code-snippet .mut{ color:rgba(255,255,255,.42); }
+
+.code-desc{ font-family:var(--font-body); font-size:var(--text-sm); line-height:1.5; color:var(--text-secondary); margin-top:var(--space-3); max-width:52ch;
+  display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:3em; }
+.code-tags{ display:flex; flex-wrap:wrap; gap:var(--space-2); margin-top:var(--space-3); }
+.code-tags span{ font-family:var(--font-mono); font-size:0.66rem; letter-spacing:.04em; color:var(--text-secondary);
+  background:var(--bg-page-2); border-radius:var(--radius-sm); padding:3px 8px; }
+.code-foot{ margin-top:var(--space-4); padding-top:var(--space-3); border-top:1px solid var(--border-hairline); }
+.code-link{ display:inline-flex; align-items:center; gap:6px; font-family:var(--font-display); font-weight:600; font-size:var(--text-sm);
+  color:var(--interactive); transition:color var(--duration-base) var(--ease-standard); }
+.code-link .arrow{ transition:transform var(--duration-base) var(--ease-standard); }
+.code-card:hover .code-link{ color:var(--interactive-hover); }
+.code-card:hover .code-link .arrow{ transform:translateX(3px); }
+
+@media(max-width:760px){ .code-wall{ grid-template-columns:1fr; } #code{ scroll-margin-top:60px; } }
+
+/* --- Code sub-heading (e.g. "Utilities") --- */
+.code-subhead{ max-width:var(--content-max); margin:var(--space-6) auto var(--space-5); padding-top:var(--space-5);
+  border-top:1px solid var(--border-hairline); display:flex; align-items:baseline; gap:var(--space-3); flex-wrap:wrap; }
+.code-subhead h3{ font-family:var(--font-display); font-weight:700; font-size:var(--text-lg); letter-spacing:var(--tracking-tight); color:var(--text-primary); }
+.code-subhead .sub-note{ font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--text-secondary); margin-left:var(--space-4); }
+
+/* --- Utilities: small cards, name + one line, 3-across --- */
+.util-wall{ max-width:var(--content-max); margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); }
+.util-card{ display:flex; flex-direction:column; gap:6px; background:var(--surface); border-radius:var(--radius-sm);
+  box-shadow:var(--shadow-card); padding:var(--space-4);
+  transition:transform var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard); }
+.util-card:hover{ transform:translateY(-3px); box-shadow:var(--shadow-lift); }
+.util-name{ font-family:var(--font-mono); font-size:var(--text-sm); font-weight:500; color:var(--text-primary); display:flex; align-items:center; gap:9px; }
+.util-name .dot{ width:7px; height:7px; border-radius:50%; background:var(--cobalt); flex:0 0 auto; }
+/* staggered accent (diagonal): 3 of each colour, no column stripes. Tuned for the 9-card set. */
+.util-card:nth-child(2) .dot, .util-card:nth-child(4) .dot, .util-card:nth-child(9) .dot{ background:var(--magenta); }
+.util-card:nth-child(3) .dot, .util-card:nth-child(5) .dot, .util-card:nth-child(7) .dot{ background:var(--yellow); }
+.util-desc{ font-family:var(--font-body); font-size:var(--text-xs); line-height:1.5; color:var(--text-secondary); }
+@media(max-width:760px){ .util-wall{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:480px){ .util-wall{ grid-template-columns:1fr; } }
+
+/* --- "View more on GitHub" button under the utilities --- */
+.code-more{ max-width:var(--content-max); margin:var(--space-6) auto 0; display:flex; justify-content:flex-start; }
+.code-more a{ display:inline-flex; align-items:center; gap:6px; font-family:var(--font-display); font-weight:600; font-size:var(--text-sm);
+  color:var(--interactive); text-decoration:none; transition:color var(--duration-base) var(--ease-standard); }
+.code-more a:hover{ color:var(--interactive-hover); }
+.code-more a .arrow{ transition:transform var(--duration-base) var(--ease-standard); }
+.code-more a:hover .arrow{ transform:translateX(3px); }
+
+/* =====================================================================
+   ABOUT (#about) — white band. Bio + CV in a tab control; clients as a
+   simple list under a (larger) headshot.
+   ===================================================================== */
+#about{ background:var(--surface); }
+.about-grid{ max-width:var(--content-max); margin:0 auto; display:grid;
+  grid-template-columns:minmax(230px,285px) 1fr; gap:var(--space-8); align-items:start; }
+
+/* headshot — matte frame, slight tilt, straightens on hover */
+.about-media{ display:flex; flex-direction:column; }
+.about-photo{ margin:0; background:var(--surface); border-radius:var(--radius-md); box-shadow:var(--shadow-frame);
+  padding:13px 13px 16px; transform:rotate(-2.2deg);
+  transition:transform var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard); }
+.about-photo:hover{ transform:rotate(0deg); box-shadow:var(--shadow-lift); }
+.about-photo .frame-slot{ position:relative; aspect-ratio:4/5; border-radius:var(--radius-sm); overflow:hidden;
+  background:var(--bg-page-2); display:flex; align-items:center; justify-content:center; }
+.about-photo .frame-slot::after{ content:""; position:absolute; inset:0; box-shadow:var(--shadow-inset); border-radius:inherit; pointer-events:none; }
+.about-photo .frame-slot span{ font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--text-secondary); }
+.about-photo figcaption{ font-family:var(--font-mono); font-size:0.68rem; letter-spacing:.03em; color:var(--text-secondary); margin-top:10px; text-align:center; }
+
+/* simple client list under the headshot */
+.about-clients{ margin-top:var(--space-6); }
+.about-clients .lbl{ display:block; font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:var(--tracking-label);
+  text-transform:uppercase; color:var(--text-secondary); margin-bottom:var(--space-3); }
+.about-clients ul{ list-style:disc; margin:0; padding-left:1.15em; }
+.about-clients li{ font-family:var(--font-body); font-size:var(--text-xs); color:var(--text-primary); padding:2px 0; }
+.about-clients li::marker{ color:var(--highlight); }
+
+/* tab control: About | CV */
+.about-tabs{ display:flex; gap:var(--space-6); border-bottom:1px solid var(--border-hairline); margin-bottom:var(--space-5); }
+.about-tab{ appearance:none; background:none; border:0; cursor:pointer; padding:0 0 var(--space-3);
+  font-family:var(--font-display); font-weight:700; font-size:var(--text-md); color:var(--text-secondary);
+  position:relative; transition:color var(--duration-base) var(--ease-standard); }
+.about-tab:hover{ color:var(--text-primary); }
+.about-tab.active{ color:var(--text-primary); }
+.about-tab.active::after{ content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--highlight); }
+.about-panel{ display:none; }
+.about-panel.active{ display:block; }
+
+/* bio copy (kicker over it, full column width, no magenta emphasis) */
+.about-kicker{ font-family:var(--font-display); font-weight:600; font-size:var(--text-lg); line-height:1.3; letter-spacing:var(--tracking-tight);
+  color:var(--text-primary); margin:0 0 var(--space-4); }
+/* short, wider vertical bar — sits from the text baseline up to the cap height */
+.about-kicker::before{ content:""; display:inline-block; width:4.5px; height:calc(0.72em + 2px); background:var(--highlight); vertical-align:baseline; margin-right:8.4px; }
+.about-body p{ font-family:var(--font-body); font-size:var(--text-base); line-height:1.7; color:var(--text-primary); margin:0 0 var(--space-4); }
+
+/* CV tab — clean résumé, no heavy document framing */
+.cv-simple{ display:grid; grid-template-columns:1fr 1fr; gap:var(--space-7); margin-bottom:var(--space-6); }
+.cv-group h4{ font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--highlight); margin-bottom:var(--space-3); }
+.cv-group ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:var(--space-3); }
+.cv-group li{ font-family:var(--font-body); font-weight:600; font-size:var(--text-sm); line-height:1.35; color:var(--text-primary); }
+.cv-group li small{ display:block; font-family:var(--font-mono); font-weight:400; font-size:0.68rem; letter-spacing:.02em; color:var(--text-secondary); margin-top:2px; }
+.cv-download{ display:inline-flex; align-items:center; gap:8px; font-family:var(--font-display); font-weight:600; font-size:var(--text-sm);
+  color:var(--surface); background:var(--interactive); border-radius:var(--radius-pill); padding:10px 20px; box-shadow:var(--shadow-card);
+  transition:transform var(--duration-fast) var(--ease-standard), background var(--duration-base) var(--ease-standard); }
+.cv-download .arrow{ transition:transform var(--duration-base) var(--ease-standard); }
+.cv-download:hover{ background:var(--interactive-hover); transform:translateY(-2px); }
+.cv-download:hover .arrow{ transform:translateX(3px); }
+.about-foot{ margin-top:var(--space-7); padding-top:var(--space-5); border-top:1px solid var(--border-hairline); }
+
+/* CV tab — full résumé with dated entries */
+.cv-block{ margin-bottom:var(--space-6); }
+.cv-heading{ font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--highlight); margin-bottom:var(--space-4); }
+.cv-list{ display:flex; flex-direction:column; gap:var(--space-5); }
+/* two-column variant (Education) — no divider rules, just grid gaps */
+.cv-list--2col{ display:grid; grid-template-columns:1fr 1fr; gap:var(--space-5) var(--space-7); }
+.cv-list--2col .cv-entry{ border-bottom:0; padding-bottom:0; }
+.cv-entry{ display:grid; grid-template-columns:1fr auto; gap:2px var(--space-4); padding-bottom:var(--space-5); border-bottom:1px solid var(--border-hairline); }
+.cv-entry:last-child{ border-bottom:0; padding-bottom:0; }
+.cv-role2{ font-family:var(--font-display); font-weight:700; font-size:var(--text-md); line-height:1.2; color:var(--text-primary); }
+.cv-emp{ font-family:var(--font-body); font-size:var(--text-sm); color:var(--text-secondary); margin-top:2px; }
+.cv-dates{ font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:.04em; color:var(--cobalt); text-align:right; white-space:nowrap; padding-top:5px; }
+.cv-desc{ grid-column:1 / -1; font-family:var(--font-body); font-size:var(--text-sm); line-height:1.55; color:var(--text-primary); margin-top:8px; max-width:70ch; }
+.skills-note{ font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:.03em; color:var(--text-secondary); margin-top:var(--space-4); }
+.cv-points{ grid-column:1 / -1; margin:8px 0 0; padding-left:1.15em; }
+.cv-points li{ font-family:var(--font-body); font-size:var(--text-sm); line-height:1.5; color:var(--text-primary); margin-bottom:5px; max-width:72ch; }
+.cv-points li::marker{ color:var(--magenta); }
+
+/* Skills tab — three columns from the CV's Technical section */
+.skills-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-6) var(--space-7); }
+.skills-grid .sk h4{ font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--highlight); margin-bottom:var(--space-3); }
+.skills-grid .sk ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
+.skills-grid .sk li{ font-family:var(--font-body); font-size:var(--text-sm); line-height:1.4; color:var(--text-primary); }
+@media(max-width:720px){ .skills-grid{ grid-template-columns:1fr; gap:var(--space-5); } }
+
+/* =====================================================================
+   FOOTER — charcoal band: name, simple nav, social placeholders
+   ===================================================================== */
+.site-footer{ background:var(--charcoal); color:#fff; margin-top:var(--space-10); }
+.foot-wrap{ max-width:var(--content-max); margin:0 auto; padding:var(--space-8) 0 var(--space-6); }
+.foot-top{ display:flex; align-items:center; justify-content:space-between; gap:var(--space-6); flex-wrap:wrap; padding-bottom:var(--space-4); }
+.foot-brand{ display:flex; flex-direction:column; gap:4px; }
+.foot-name{ font-family:var(--font-display); font-weight:800; font-size:var(--text-lg); letter-spacing:var(--tracking-tight); }
+.foot-role{ font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.55); }
+.foot-role .b{ color:var(--yellow); }
+.foot-nav{ display:flex; gap:var(--space-5); flex-wrap:wrap; }
+.foot-nav a{ font-family:var(--font-display); font-weight:600; font-size:var(--text-sm); color:rgba(255,255,255,.8);
+  transition:color var(--duration-fast) var(--ease-standard); }
+.foot-nav a:hover{ color:#fff; }
+.foot-social{ display:flex; gap:var(--space-3); }
+.soc{ width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,.25);
+  display:inline-flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:.7rem; letter-spacing:.02em; color:rgba(255,255,255,.85);
+  transition:background var(--duration-base) var(--ease-standard), border-color var(--duration-base) var(--ease-standard), color var(--duration-base) var(--ease-standard), transform var(--duration-fast) var(--ease-standard); }
+.soc:hover{ background:var(--cobalt); border-color:var(--cobalt); color:#fff; transform:translateY(-2px); }
+.soc svg{ width:15px; height:15px; fill:currentColor; display:block; }
+.foot-base{ padding-top:var(--space-3); border-top:1px solid rgba(255,255,255,.12);
+  font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:.06em; color:rgba(255,255,255,.6); }
+.foot-copy .c{ font-size:1.25rem; line-height:0; vertical-align:-0.16em; color:rgba(255,255,255,.85); margin-right:3px; }
+@media(max-width:860px){
+  .foot-wrap{ padding:var(--space-7) var(--space-5) var(--space-5); }
+  .foot-top{ flex-direction:column; align-items:flex-start; gap:var(--space-5); }
+}
+
+@media(max-width:820px){
+  .about-grid{ grid-template-columns:1fr; gap:var(--space-6); }
+  .about-media{ max-width:285px; }
+  #about{ scroll-margin-top:60px; }
+}
+@media(max-width:560px){
+  .cv-simple{ grid-template-columns:1fr; gap:var(--space-5); }
+  .cv-list--2col{ grid-template-columns:1fr; }
+  .cv-entry{ grid-template-columns:1fr; }
+  .cv-dates{ text-align:left; padding-top:0; margin-top:2px; }
+}
+</style>
+</head>
+<body>
+
+<!-- SIDE NAV -->
+<nav class="sidenav">
+  <div class="brand"><img src="Logo/ColorLogo_RGB_Square.svg" alt="Andy Eisenberg"></div>
+  <div class="navlist">
+    <a href="#intro" class="active"><span class="idx">01</span> Home</a>
+    <a href="#portfolio"><span class="idx">02</span> Portfolio</a>
+    <a href="#code"><span class="idx">03</span> Code</a>
+    <a href="#about"><span class="idx">04</span> About</a>
+  </div>
+  <div class="nav-contact">
+    <a href="mailto:andy@andyeisenberg.com">andy@andyeisenberg.com</a>
+    <a href="tel:+61413096097">+61 413 096 097</a>
+  </div>
+</nav>
+
+<!-- MOBILE TOP BAR -->
+<div class="topbar">
+  <span class="tb-logo"><img src="Logo/ColorLogo_RGB_Square.svg" alt="Andy Eisenberg"></span>
+  <div class="avail"><span class="dot"></span> Available</div>
+</div>
+
+<div class="main">
+  <header class="hero" id="intro">
+    <div class="hero-stage">
+
+      <div class="intro-card">
+       <div class="intro-content">
+        <div class="headline-vector">
+          <svg viewBox="0 0 967.62 442.56" xmlns="http://www.w3.org/2000/svg" role="img"
+               aria-label="Andy Eisenberg | Creative Technologist, Motion Designer, Art Director">
+            <defs><style>
+              .hl-name   { font-family:"Hanken Grotesk",system-ui,sans-serif; font-size:184.91px; font-weight:900; fill:var(--text-primary); }
+              .hl-line   { fill:none; stroke:var(--highlight); stroke-miterlimit:10; stroke-width:9px; }
+              .hl-accent { fill:var(--highlight); }
+              .hl-mono   { font-family:"JetBrains Mono",ui-monospace,monospace; font-size:27.27px; font-weight:300; fill:var(--text-primary); }
+            </style></defs>
+            <text class="hl-name" transform="translate(67.11 156.89)"><tspan x="0" y="0">ANDY</tspan></text>
+            <text class="hl-name" transform="translate(0 308.79)"><tspan x="0" y="0">EISENBERG</tspan></text>
+            <line class="hl-line" x1="10.91" y1="334.18" x2="958.74" y2="334.18"/>
+            <text class="hl-mono" transform="translate(9.91 384.78)"><tspan x="0" y="0" xml:space="preserve">CREATIVE TECHNOLOGIST  </tspan><tspan class="hl-accent" x="376.26" y="0">• </tspan><tspan x="408.98" y="0" xml:space="preserve"> MOTION DESIGNER  </tspan><tspan class="hl-accent" x="703.45" y="0">• </tspan><tspan x="736.17" y="0" xml:space="preserve"> ART DIRECTOR</tspan></text>
+          </svg>
+        </div>
+        <p class="intro-body"><span class="greeting">Hi! I&rsquo;m Andy.</span> I&rsquo;ve spent nearly two decades in motion graphics and art direction, and somewhere along the way, I became just as interested in building the tools as using them (so these days, I do both). My reel&rsquo;s over on the right, and there&rsquo;s more of my work and code just below.</p>
+        <div class="hero-cta">
+          <a href="#portfolio" class="btn ghost">Portfolio</a>
+          <a href="#code" class="btn ghost">Code</a>
+          <a href="#about" class="btn ghost">About</a>
+        </div>
+       </div>
+      </div>
+
+      <div class="frame-cluster">
+        <figure class="photo-frame photo-frame--labeled fc1" data-vimeo="315838988" data-title="Motion Reel" role="button" tabindex="0" aria-label="Play Andy Eisenberg motion reel">
+          <div class="slides">
+            <img class="on" src="Gallery/Showreel-Button_001.jpg" alt="Andy Eisenberg motion reel">
+            <img src="Gallery/Showreel-Button_002.jpg" alt="" loading="lazy">
+            <img src="Gallery/Showreel-Button_003.jpg" alt="" loading="lazy">
+            <img src="Gallery/Showreel-Button_004.jpg" alt="" loading="lazy">
+            <img src="Gallery/Showreel-Button_005.jpg" alt="" loading="lazy">
+            <img src="Gallery/Showreel-Button_006.jpg" alt="" loading="lazy">
+            <img src="Gallery/Showreel-Button_007.jpg" alt="" loading="lazy">
+            <img src="Gallery/Showreel-Button_008.jpg" alt="" loading="lazy">
+            <img src="Gallery/Showreel-Button_009.jpg" alt="" loading="lazy">
+            <img src="Gallery/Showreel-Button_010.jpg" alt="" loading="lazy">
+            <span class="reel-play" aria-hidden="true"></span>
+          </div>
+          <figcaption class="cap">View my Motion Reel &uarr;</figcaption>
+        </figure>
+        <figure class="photo-frame fc2">
+          <div class="slides">
+            <img class="on" src="Gallery/AE_Gallery_002.jpg" alt="Selected motion design work">
+            <img src="Gallery/AE_Gallery_004.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_006.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_008.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_010.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_012.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_014.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_016.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_018.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_020.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_022.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_024.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_026.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_028.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_030.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_032.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_034.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_036.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_038.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_040.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_042.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_044.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_046.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_048.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_050.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_052.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_054.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_056.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_058.png" alt="" loading="lazy">
+          </div>
+        </figure>
+        <figure class="photo-frame fc3">
+          <div class="slides">
+            <img class="on" src="Gallery/AE_Gallery_001.jpg" alt="Selected motion design work">
+            <img src="Gallery/AE_Gallery_003.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_005.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_007.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_009.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_011.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_013.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_015.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_017.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_019.jpg" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_021.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_023.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_025.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_027.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_029.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_031.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_033.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_035.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_037.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_039.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_041.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_043.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_045.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_047.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_049.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_051.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_053.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_055.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_057.png" alt="" loading="lazy">
+            <img src="Gallery/AE_Gallery_059.png" alt="" loading="lazy">
+          </div>
+        </figure>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- PORTFOLIO -->
+  <section class="section" id="portfolio">
+    <div class="section-head" id="portfolio-head">
+      <div>
+        <span class="eyebrow">02 · Portfolio</span>
+        <h2>Things I&rsquo;ve made <span class="swap swap-word" data-motion="move." data-case="work.">move.</span></h2>
+      </div>
+      <p class="lede swap swap-lede" data-motion="A selection of my motion design and direction work. Hover a frame to preview, click to play the full piece." data-case="Written breakdowns, code snippets and best practices I&nbsp;take for some of my more technical projects.">A selection of my motion design and direction work. Hover a frame to preview, click to play the full piece.</p>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-tab="motion" role="tab" aria-selected="true">Motion</button>
+      <button class="tab" data-tab="case" role="tab" aria-selected="false">Case Studies</button>
+    </div>
+
+    <div class="tab-panel active" id="panel-motion">
+
+    <div class="work-wall">
+      <figure class="work-tile" data-vimeo="909050493" data-tag="University of Sydney" data-title="Work Live Play Learn">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/1792359616-68a8781d430237f793969af289841d13d244b841b55a8e2ee4d5d79946eecaac-d_640x360" alt="University of Sydney — Work Live Play Learn" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">University of Sydney</span><span class="wt-title">Work Live Play Learn</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="1128392890" data-tag="Jaecoo" data-title="J7 Adventure Spot">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/2185840333-3859e1d2f7b41b76fabe9d6af72a681906bc3752183f3294bfdbb0cffbc676b3-d_640x360" alt="Jaecoo — J7 Adventure Spot" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">Jaecoo</span><span class="wt-title">J7 Adventure Spot</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="316259370" data-tag="ABC" data-title="Boxing for Palm Island">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/758232066-444745ab824e8cae47a03c646966e562a810905f6a57f3aac1d1730f0ffc01e3-d_640x360" alt="ABC — Boxing for Palm Island" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">ABC</span><span class="wt-title">Boxing for Palm Island</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="909904884" data-tag="Luffy AI" data-title="Process Explainer">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/1793609536-64128220dcfa5ba6ee1b180cd44e8fdf1da68afd76e52a7edd01f08d325e73f5-d_640x360" alt="Luffy AI — Process Explainer" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">Luffy AI</span><span class="wt-title">Process Explainer</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="316264008" data-tag="FX" data-title="Criminal Minds: Season 7">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/758251046-dd6d0e8ebae9282afe7f082d0ab398308f639b5167348986c274fcfacebfd034-d_640x360" alt="FX — Criminal Minds: Season 7" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">FX</span><span class="wt-title">Criminal Minds: Season 7</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="316270242" data-tag="Google" data-title="Skippy&#x27;s Competition">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/758246595-a341c9c1c3cf8f87246bd1ec3fce88e997239f67fcbf1c3e255ff73ddcc19379-d_640x360" alt="Google — Skippy&#x27;s Competition" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">Google</span><span class="wt-title">Skippy&#x27;s Competition</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="696840333" data-tag="Foxtel" data-title="Foxtel Intelligent Video">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/1792204066-835294d67246920ed98de11148fc2f560e8a35726dacc54ddfc72e78bc4602b2-d_640x360" alt="Foxtel — Foxtel Intelligent Video" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">Foxtel</span><span class="wt-title">Foxtel Intelligent Video</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="1186088955" data-tag="Sydney Roosters" data-title="Hype Piece">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/2187286747-73b7aa3f41ae1b31c297c39e4a45871fdda3c0eb66a97c5f7d859fcdb0dff0d2-d_640x360" alt="Sydney Roosters — Hype Piece" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">Sydney Roosters</span><span class="wt-title">Hype Piece</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="909051448" data-tag="TikTok" data-title="Backstage Social Promo">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/1792360030-9d28628684de14fa329c8a47cee6ad435be6cf614a7e4e65f0ec6f88e79cffa1-d_640x360" alt="TikTok — Backstage Social Promo" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">TikTok</span><span class="wt-title">Backstage Social Promo</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="316260767" data-tag="National Geographic" data-title="The New Pioneers">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/758238048-683cd15adcb61109984ae55316881ec8e8cdc539ee787a53e5d0b57d34d690ae-d_640x360" alt="National Geographic — The New Pioneers" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">National Geographic</span><span class="wt-title">The New Pioneers</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="285044428" data-tag="Australian Energy Regulator" data-title="What makes up my Electricity Bill?">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/719628110-08ff219609698f6d22e2f2447b5e0f67cf122fe80a723855580bb723eb76e9d5-d_640x360" alt="Australian Energy Regulator — What makes up my Electricity Bill?" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">Australian Energy Regulator</span><span class="wt-title">What makes up my Electricity Bill?</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="316267420" data-tag="The Airport Economist" data-title="Title Sequence">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/758242781-0fbb02602bbee118658e5187e63a365b21ac435382d1e2ecf401e25e60732e94-d_640x360" alt="The Airport Economist — Title Sequence" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">The Airport Economist</span><span class="wt-title">Title Sequence</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="352052661" data-tag="University of Sydney" data-title="Sydney Nano Challenges">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/1792196333-c671e2c14e0b4a6d6b4a2746597c2c5dd30b96aa32e2626e57951b18d2046476-d_640x360" alt="University of Sydney — Sydney Nano Challenges" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">University of Sydney</span><span class="wt-title">Sydney Nano Challenges</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="908942424" data-tag="Care For Kids" data-title="Introduction Video">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/1792193114-a6fbdffa7d717d7b78ce6c9c64327be4ff539cbad9d9bf7c5e95ffde86e67b7c-d_640x360" alt="Care For Kids — Introduction Video" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">Care For Kids</span><span class="wt-title">Introduction Video</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="316259923" data-tag="Pepsi Max" data-title="The Walking Dead Bumper">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/758232412-b20f917d90488ed9af11a8f27bbc5e35dadbf93386b7b0dbf5b26d20efd6910b-d_640x360" alt="Pepsi Max — The Walking Dead Bumper" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">Pepsi Max</span><span class="wt-title">The Walking Dead Bumper</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="316258642" data-tag="MCN" data-title="How to Act.">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/758231490-73980f305da43e52151c7e57408059f920fe50898c046dcb8a34af98108330e7-d_640x360" alt="MCN — How to Act." loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">MCN</span><span class="wt-title">How to Act.</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="285043983" data-tag="Snap" data-title="Print is Certainly Not Dead">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/719628039-86cda24536ae472e961e217db9389f3d43a3731b0fcb4138c347f03665b18e02-d_640x360" alt="Snap — Print is Certainly Not Dead" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">Snap</span><span class="wt-title">Print is Certainly Not Dead</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="316271303" data-ar="1/1" data-tag="Australian Maritime Museum" data-title="Operation Jaywick VR: The Krait">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/758250215-0c91811af405904353854e74eed552fa866447e285a061338820c5404e5baedf-d_640x360" alt="Australian Maritime Museum — Operation Jaywick VR: The Krait" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">Australian Maritime Museum</span><span class="wt-title">Operation Jaywick VR: The Krait</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="908953587" data-tag="World First" data-title="Borderless Business">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/1792212465-7c5efedc02e7534bd09ced4e288f1384af89d222ed5cddfac40eb45d87391010-d_640x360" alt="World First — Borderless Business" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">World First</span><span class="wt-title">Borderless Business</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="285044146" data-tag="Evari" data-title="The Cloud">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/719627530-f0767666db2868a4a448f891623b78ca9b7fd242628b0864373dbeacc48124de-d_640x360" alt="Evari — The Cloud" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">Evari</span><span class="wt-title">The Cloud</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="908940450" data-ar="9184/756" data-tag="Stadium Australia" data-title="Cathy Freeman Dedication">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/1792192718-73a378e5f9d6ef3758dc1527397f6320c399f9e74134f3a5bfc45d572b88cdb4-d_640x360" alt="Stadium Australia — Cathy Freeman Dedication" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">Stadium Australia</span><span class="wt-title">Cathy Freeman Dedication</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="908939988" data-tag="SBS" data-title="Inclusion Trailer">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/1792190750-17a2a2b78421a6c9b48b437273276b31da08d8809233ef94a9a088fe058d1608-d_640x360" alt="SBS — Inclusion Trailer" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">SBS</span><span class="wt-title">Inclusion Trailer</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="1128383727" data-tag="Charitabl." data-title="Intro Video">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/2071429681-64f557e5d4d66f2c028b4da6b414a8ff950a5497db3e57a977805fdcc8b82f1e-d_640x360" alt="Charitabl. — Intro Video" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">Charitabl.</span><span class="wt-title">Intro Video</span></figcaption>
+      </figure>
+      <figure class="work-tile" data-vimeo="1128394667" data-tag="West Tigers" data-title="Stadium Hype Reel">
+        <div class="wt-media"><img class="wt-still" src="https://i.vimeocdn.com/video/2071439794-b4b5277c87f44e0f715ba9f5cd7bb70a3c65c12c45932eb6d0d4901703f54290-d_640x360" alt="West Tigers — Stadium Hype Reel" loading="lazy"><span class="wt-play"></span></div>
+        <figcaption class="wt-cap"><span class="wt-tag">West Tigers</span><span class="wt-title">Stadium Hype Reel</span></figcaption>
+      </figure>
+        </div>
+    </div>
+
+    <div class="tab-panel gone" id="panel-case">
+      <div class="case-wall">
+        <article class="case-card" data-case="good-game-background">
+          <div class="cc-media"><img class="cc-thumb" src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Design-Evoloution_004.jpg" alt="Good Game Background"></div>
+          <div class="cc-body">
+            <h3 class="cc-title">Good Game Background</h3>
+            <p class="cc-excerpt">A customizable After Effects background with randomizable hexes and icons and eight swappable colors, all driven by two sliders.</p>
+          </div>
+        </article>
+        <article class="case-card" data-case="resolution-adaption-graphics">
+          <div class="cc-media"><img class="cc-thumb" src="Gallery/Case%20Study%20Images/Adaptive%20Lower%20Third/web/cover.png" alt="Resolution Adaption Graphics"></div>
+          <div class="cc-body">
+            <h3 class="cc-title">Resolution Adaption Graphics</h3>
+            <p class="cc-excerpt">How to create a single After Effects mogrt that adapts a graphic to multiple resolutions (16×9, 9×16, 1×1) using a master switch in a master composition.</p>
+          </div>
+        </article>
+        <article class="case-card" data-case="case-03">
+          <div class="cc-media"><span class="cc-ph">Case study</span></div>
+          <div class="cc-body">
+            <h3 class="cc-title">Case study 03</h3>
+            <p class="cc-excerpt">A short breakdown of the project (the brief, the build, and what made it work) will live here.</p>
+          </div>
+        </article>
+        <article class="case-card" data-case="case-04">
+          <div class="cc-media"><span class="cc-ph">Case study</span></div>
+          <div class="cc-body">
+            <h3 class="cc-title">Case study 04</h3>
+            <p class="cc-excerpt">A short breakdown of the project (the brief, the build, and what made it work) will live here.</p>
+          </div>
+        </article>
+        <article class="case-card" data-case="case-05">
+          <div class="cc-media"><span class="cc-ph">Case study</span></div>
+          <div class="cc-body">
+            <h3 class="cc-title">Case study 05</h3>
+            <p class="cc-excerpt">A short breakdown of the project (the brief, the build, and what made it work) will live here.</p>
+          </div>
+        </article>
+        <article class="case-card" data-case="case-06">
+          <div class="cc-media"><span class="cc-ph">Case study</span></div>
+          <div class="cc-body">
+            <h3 class="cc-title">Case study 06</h3>
+            <p class="cc-excerpt">A short breakdown of the project (the brief, the build, and what made it work) will live here.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CODE -->
+  <section class="section" id="code">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">03 &middot; Code</span>
+        <h2>Things I&rsquo;ve made <span>run.</span></h2>
+      </div>
+      <p class="lede">A few of the After Effects scripts and pipeline tools I&rsquo;ve built to take the repetition out of production.</p>
+    </div>
+
+    <div class="code-wall">
+
+      <a class="code-card" href="https://github.com/andye-86/ae-project-sort" target="_blank" rel="noopener">
+        <h3 class="code-title">ae-project-sort</h3>
+        <div class="code-snippet"><span class="mut">// one-click project tidy</span><br><span class="tok">for</span> (var i=1; i&lt;=proj.numItems; i++) sortIntoBins(item(i));</div>
+        <p class="code-desc">Sorts and color-labels a messy project panel into a clean folder structure, in one click.</p>        <div class="code-foot"><span class="code-link">View on GitHub <span class="arrow">&rarr;</span></span></div>
+      </a>
+
+      <a class="code-card" href="https://github.com/andye-86/ae-color-palette-panel/releases/tag/v1.0.0" target="_blank" rel="noopener">
+        <h3 class="code-title">ae-color-palette-panel</h3>
+        <div class="code-snippet"><span class="mut">// dockable panel, click to apply</span><br><span class="tok">function</span> applySwatch(sel, color) { recolor(sel, color); }</div>
+        <p class="code-desc">A dockable panel for storing color swatches and applying them to layers, text, and shapes.</p>        <div class="code-foot"><span class="code-link">View on GitHub <span class="arrow">&rarr;</span></span></div>
+      </a>
+
+      <a class="code-card" href="https://github.com/andye-86/ae-brand-pipeline" target="_blank" rel="noopener">
+        <h3 class="code-title">ae-brand-pipeline</h3>
+        <div class="code-snippet"><span class="mut">// style guide -&gt; render</span><br>applyBrandRules(promo, guide); <span class="tok">queueRender</span>(promo);</div>
+        <p class="code-desc">Turns a broadcaster&rsquo;s brand rules into an automated, repeatable promo render.</p>        <div class="code-foot"><span class="code-link">View on GitHub <span class="arrow">&rarr;</span></span></div>
+      </a>
+
+      <a class="code-card" href="https://github.com/andye-86/ae-expression-kit" target="_blank" rel="noopener">
+        <h3 class="code-title">ae-expression-kit</h3>
+        <div class="code-snippet"><span class="tok">seedRandom</span>(index, true);<br>Math.floor(random(0, n)) * .04; <span class="mut">// @ 25fps</span></div>
+        <p class="code-desc">A small kit of reusable After Effects expressions (randomizers, control-linked switches) from real builds.</p>        <div class="code-foot"><span class="code-link">View on GitHub <span class="arrow">&rarr;</span></span></div>
+      </a>
+
+      <a class="code-card" href="https://github.com/andye-86/ae-render-queue" target="_blank" rel="noopener">
+        <h3 class="code-title">ae-render-queue</h3>
+        <div class="code-snippet"><span class="mut">// queue every comp, one preset</span><br><span class="tok">for</span> (c in comps) addToRenderQueue(c, preset);</div>
+        <p class="code-desc">Queues comps for render with consistent output presets and names, in one pass.</p>        <div class="code-foot"><span class="code-link">View on GitHub <span class="arrow">&rarr;</span></span></div>
+      </a>
+
+      <a class="code-card" href="https://github.com/andye-86/ae-template-checker" target="_blank" rel="noopener">
+        <h3 class="code-title">ae-template-checker</h3>
+        <div class="code-snippet"><span class="mut">// pre-flight a mogrt</span><br><span class="tok">if</span> (unlinkedControls(comp).length) warn(comp);</div>
+        <p class="code-desc">Pre-flights a MOGRT before export, flagging unlinked controls and missing fonts.</p>        <div class="code-foot"><span class="code-link">View on GitHub <span class="arrow">&rarr;</span></span></div>
+      </a>
+
+    </div>
+
+    <div class="code-subhead">
+      <h3>Utilities</h3>
+      <span class="sub-note">small, single-job scripts</span>
+    </div>
+
+    <div class="util-wall">
+      <a class="util-card" href="https://github.com/andye-86/ae-wip-maker" target="_blank" rel="noopener">
+        <span class="util-name"><span class="dot"></span>ae-wip-maker</span>
+        <p class="util-desc">Turns a selected comp into a framed, client-ready WIP version.</p>
+      </a>
+      <a class="util-card" href="https://github.com/andye-86/ae-guide-maker" target="_blank" rel="noopener">
+        <span class="util-name"><span class="dot"></span>ae-guide-maker</span>
+        <p class="util-desc">Shrinks a layer into a locked reference thumbnail, hidden from renders.</p>
+      </a>
+      <a class="util-card" href="https://github.com/andye-86/ae-same-above-as-below" target="_blank" rel="noopener">
+        <span class="util-name"><span class="dot"></span>ae-same-above-as-below</span>
+        <p class="util-desc">Matches a layer&rsquo;s in and out points to the one above or below it.</p>
+      </a>
+      <a class="util-card" href="https://github.com/andye-86/ae-read-speed-calculator" target="_blank" rel="noopener">
+        <span class="util-name"><span class="dot"></span>ae-read-speed-calculator</span>
+        <p class="util-desc">Estimates read-aloud time for a script and builds a timed comp.</p>
+      </a>
+      <a class="util-card" href="https://github.com/andye-86/ae-alphabitizer" target="_blank" rel="noopener">
+        <span class="util-name"><span class="dot"></span>ae-alphabitizer</span>
+        <p class="util-desc">Stacks a long list of text layers into alphabetical order.</p>
+      </a>
+      <a class="util-card" href="https://github.com/andye-86/ae-fast-slideshow" target="_blank" rel="noopener">
+        <span class="util-name"><span class="dot"></span>ae-fast-slideshow</span>
+        <p class="util-desc">Builds a Ken Burns-style image slideshow comp from scratch.</p>
+      </a>
+      <a class="util-card" href="https://github.com/andye-86/ae-mogrt-rigger" target="_blank" rel="noopener">
+        <span class="util-name"><span class="dot"></span>ae-mogrt-rigger</span>
+        <p class="util-desc">Wires text layers and null-driven controls into Essential Graphics automatically.</p>
+      </a>
+      <a class="util-card" href="https://github.com/andye-86/ae-screenshot-generator" target="_blank" rel="noopener">
+        <span class="util-name"><span class="dot"></span>ae-screenshot-generator</span>
+        <p class="util-desc">Saves a PNG of each selected comp every N frames.</p>
+      </a>
+      <a class="util-card" href="https://github.com/andye-86/ae-adaptive-resolution-template" target="_blank" rel="noopener">
+        <span class="util-name"><span class="dot"></span>ae-adaptive-resolution-template</span>
+        <p class="util-desc">A starting-point AE project for building adaptive-resolution templates.</p>
+      </a>
+    </div>
+
+    <div class="code-more">
+      <a href="https://github.com/andye-86?tab=repositories" target="_blank" rel="noopener">View more directly on my GitHub <span class="arrow">&rarr;</span></a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">04 &middot; About</span>
+        <h2>Things about me.</h2>
+      </div>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-media">
+        <figure class="about-photo">
+          <div class="frame-slot"><span>Headshot</span></div>
+          <figcaption>Hi! This is me.</figcaption>
+        </figure>
+        <div class="about-clients">
+          <span class="lbl">Folks I&rsquo;ve worked with:</span>
+          <ul>
+            <li>Google</li>
+            <li>Cisco</li>
+            <li>Palo Alto Networks</li>
+            <li>American Express</li>
+            <li>Canon</li>
+            <li>Toyota</li>
+            <li>ABC</li>
+            <li>Qantas</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="about-content">
+        <div class="about-tabs" role="tablist">
+          <button class="about-tab active" data-tab="bio" role="tab" aria-selected="true">About</button>
+          <button class="about-tab" data-tab="cv" role="tab" aria-selected="false">CV</button>
+          <button class="about-tab" data-tab="skills" role="tab" aria-selected="false">Skills</button>
+        </div>
+
+        <div class="about-panel active" id="abt-bio" role="tabpanel">
+          <div class="about-body">
+            <p class="about-kicker">Motion design roots, occasional pipeline troublemaker.</p>
+            <p>I&rsquo;m a creative technologist and designer with close to two decades of experience making pretty colors move. My career started in broadcast graphics and art direction, and somewhere along the way I discovered that I was just as interested in building the tools as I was in using them. So, while I was a senior designer at a major broadcast network, I quietly automated my own job. I took the network&rsquo;s branding guidelines, resources and templates and coded them into an After Effects pipeline that would automatically make promos for me each week. It worked exceedingly well (so well, in fact, that I started having to ask for more work just to keep busy). That project set the direction for everything since, combining design and code, together, on purpose.</p>
+            <p>These days I split my time between a Creative Technologist role at the University of Sydney (where that combination turns out to be genuinely useful at scale) and an international freelance practice, taking on projects with studios and agencies, building MOGRT template systems, writing ExtendScript automations, and helping teams figure out how AI actually fits into a real production pipeline. I care a lot about design and direction, but I care just as much about making production efficient. If you&rsquo;re looking for someone who can do both (and talk sensibly about how they connect), I&rsquo;d love to hear what you&rsquo;re working on.</p>
+          </div>
+          <div class="about-foot"><a class="cv-download" href="CV/AEisenberg_CV_2026.pdf" target="_blank" rel="noopener" aria-label="View full CV as PDF">View full CV (PDF) <span class="arrow">&rarr;</span></a></div>
+        </div>
+
+        <div class="about-panel" id="abt-cv" role="tabpanel">
+          <div class="cv-block">
+            <h4 class="cv-heading">Experience</h4>
+            <div class="cv-list">
+              <div class="cv-entry">
+                <div>
+                  <div class="cv-role2">Creative Technologist &amp; Motion Designer</div>
+                  <div class="cv-emp">Freelance</div>
+                </div>
+                <div class="cv-dates">Feb 2016 &ndash; Present</div>
+                <ul class="cv-points">
+                  <li>Deliver motion graphics and art direction across broadcast, digital, print and large-format specialty screens</li>
+                  <li>Design and build templates, systems and automations for broadcast, agency and in-house production teams</li>
+                  <li>Teach production workshops in university and corporate settings on a variety of topics (JavaScript/jQuery, Cinema 4D, After Effects, Premiere Pro, HTML5)</li>
+                  <li>Selected clients: Google, Cisco, Palo Alto Networks, American Express, Canon, Toyota, ABC, Qantas</li>
+                </ul>
+              </div>
+              <div class="cv-entry">
+                <div>
+                  <div class="cv-role2">Creative Technologist</div>
+                  <div class="cv-emp">University of Sydney &middot; Business School, Learning Innovation Office</div>
+                </div>
+                <div class="cv-dates">Apr 2024 &ndash; Present</div>
+                <ul class="cv-points">
+                  <li>Build and maintain the motion graphics systems underpinning the editorial pipeline, supporting five producer/editors and two support staff in an 11-person team</li>
+                  <li>Develop automations for the office&rsquo;s project management system</li>
+                  <li>Research, assess and test emerging production technologies (including AI) against real pipeline requirements before adoption</li>
+                </ul>
+              </div>
+              <div class="cv-entry">
+                <div>
+                  <div class="cv-role2">Editorial &amp; Graphics Officer</div>
+                  <div class="cv-emp">University of Sydney &middot; Business School, Learning Innovation Office</div>
+                </div>
+                <div class="cv-dates">Jul 2019 &ndash; Apr 2024</div>
+                <ul class="cv-points">
+                  <li>Built and maintained reusable template libraries and bespoke motion graphics for various teams and courses</li>
+                  <li>Developed custom classification and workflow systems for project managers</li>
+                </ul>
+              </div>
+              <div class="cv-entry">
+                <div>
+                  <div class="cv-role2">News Graphics Production Manager</div>
+                  <div class="cv-emp">Seven News Sydney</div>
+                </div>
+                <div class="cv-dates">Jun 2015 &ndash; Feb 2016</div>
+                <ul class="cv-points">
+                  <li>Ran a team of 13 designers producing graphics for daily news bulletins, directing design and liaising with producers and reporters</li>
+                  <li>Coded custom software to automate standard assets, freeing up the team for more complex and custom work</li>
+                </ul>
+              </div>
+              <div class="cv-entry">
+                <div>
+                  <div class="cv-role2">Senior Designer</div>
+                  <div class="cv-emp">National Geographic Channel &amp; FX Australia</div>
+                </div>
+                <div class="cv-dates">Jul 2012 &ndash; Jun 2015</div>
+                <ul class="cv-points">
+                  <li>Designed and produced original artwork for broadcast, print, outdoor and digital across four core channels and advertising partners</li>
+                  <li>Built the automation systems above and brought PR kit development in-house</li>
+                  <li>Major campaigns included The Walking Dead, Cosmos, Justified, Wayward Pines, Vikings and Da Vinci&rsquo;s Demons</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="cv-block">
+            <h4 class="cv-heading">Education</h4>
+            <div class="cv-list cv-list--2col">
+              <div class="cv-entry">
+                <div>
+                  <div class="cv-role2">Master of Interaction Design and Electronic Arts (Honours)</div>
+                  <div class="cv-emp">University of Sydney</div>
+                </div>
+              </div>
+              <div class="cv-entry">
+                <div>
+                  <div class="cv-role2">Master of Film and Digital Imaging</div>
+                  <div class="cv-emp">University of Sydney</div>
+                </div>
+              </div>
+              <div class="cv-entry">
+                <div>
+                  <div class="cv-role2">BFA Visual and Media Arts (TV/Video)</div>
+                  <div class="cv-emp">Emerson College</div>
+                </div>
+              </div>
+              <div class="cv-entry">
+                <div>
+                  <div class="cv-role2">BA Writing, Literature and Publishing</div>
+                  <div class="cv-emp">Emerson College</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-foot"><a class="cv-download" href="CV/AEisenberg_CV_2026.pdf" target="_blank" rel="noopener" aria-label="View full CV as PDF">View full CV (PDF) <span class="arrow">&rarr;</span></a></div>
+        </div>
+
+        <div class="about-panel" id="abt-skills" role="tabpanel">
+          <div class="cv-block">
+            <h4 class="cv-heading">Selected systems &amp; automations</h4>
+            <div class="cv-list">
+              <div class="cv-entry">
+                <div><div class="cv-role2">Woolworths Broadcast P&amp;P Templates</div></div>
+                <p class="cv-desc">After Effects smart templates that include features such as text-driven content, automatic re-sizing and spacing and swappable assets standards to meet tight approval cycles.</p>
+              </div>
+              <div class="cv-entry">
+                <div><div class="cv-role2">USYD MBA Graphics Package</div></div>
+                <p class="cv-desc">A 12-course MBA graphics kit developed for a compressed schedule. Auto-resizing lower thirds, slider-driven key art, adjustable transitions. Deployed across a five-editor team.</p>
+              </div>
+              <div class="cv-entry">
+                <div><div class="cv-role2">NatGeo Lower Third Pipeline</div></div>
+                <p class="cv-desc">Excel-to-After-Effects system generating nearly 100 schedule-driven, production-coded lower thirds a month. Cut a three-day manual build to roughly two hours.</p>
+              </div>
+              <div class="cv-entry">
+                <div><div class="cv-role2">FX AutoDesigner</div></div>
+                <p class="cv-desc">ExtendScript system that coded the network&rsquo;s branding guidelines into an automated promo builder. Cut average 30-second promo turnaround from four hours to fifteen minutes.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="skills-grid">
+            <div class="sk">
+              <h4>Pipeline &amp; automation</h4>
+              <ul>
+                <li>ExtendScript / Adobe JSX</li>
+                <li>Essential Graphics / MOGRT Templates</li>
+                <li>Expression-driven animation and rigs</li>
+                <li>Data-driven template builds (CSV &amp; spreadsheet ingestion)</li>
+                <li>Render &amp; delivery automation</li>
+                <li>Workflow automation (n8n, Make)</li>
+              </ul>
+            </div>
+            <div class="sk">
+              <h4>Design &amp; production</h4>
+              <ul>
+                <li>Broadcast &amp; brand motion</li>
+                <li>Art direction</li>
+                <li>Large-format &amp; non-standard screens</li>
+              </ul>
+            </div>
+            <div class="sk">
+              <h4>Code</h4>
+              <ul>
+                <li>JavaScript</li>
+                <li>HTML5 / CSS</li>
+                <li>Python</li>
+                <li>Processing</li>
+              </ul>
+            </div>
+            <div class="sk">
+              <h4>Software</h4>
+              <ul>
+                <li>After Effects, Premiere Pro</li>
+                <li>Cinema 4D, Blender</li>
+                <li>Photoshop, Illustrator, InDesign</li>
+                <li>Figma, Rive</li>
+              </ul>
+            </div>
+          </div>
+          <div class="about-foot"><a class="cv-download" href="CV/AEisenberg_CV_2026.pdf" target="_blank" rel="noopener" aria-label="View full CV as PDF">View full CV (PDF) <span class="arrow">&rarr;</span></a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="foot-wrap">
+      <div class="foot-top">
+      <div class="foot-brand">
+        <span class="foot-name">Andy Eisenberg</span>
+        <span class="foot-role">Creative Technologist <span class="b">&bull;</span> Motion Designer <span class="b">&bull;</span> Art Director</span>
+      </div>
+      <!-- Social links: hrefs are placeholders (#) — wire up LinkedIn / Dribbble / Behance / Instagram -->
+      <div class="foot-social">
+        <a class="soc" href="#" aria-label="LinkedIn (link coming soon)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        <a class="soc" href="#" aria-label="Dribbble (link coming soon)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 24C5.385 24 0 18.615 0 12S5.385 0 12 0s12 5.385 12 12-5.385 12-12 12zm10.12-10.358c-.35-.11-3.17-.953-6.384-.438 1.34 3.684 1.887 6.684 1.992 7.308 2.3-1.555 3.936-4.02 4.395-6.87zm-6.115 7.808c-.153-.9-.75-4.032-2.19-7.77l-.066.02c-5.79 2.015-7.86 6.025-8.04 6.4 1.73 1.358 3.92 2.166 6.29 2.166 1.42 0 2.77-.29 4-.816zm-11.62-2.58c.232-.4 3.045-5.055 8.332-6.765.135-.045.27-.084.405-.12-.26-.585-.54-1.167-.832-1.74C7.17 11.775 2.206 11.71 1.756 11.7l-.004.312c0 2.633.998 5.037 2.634 6.855zm-2.42-8.955c.46.008 4.683.026 9.477-1.248-1.698-3.018-3.53-5.558-3.8-5.928-2.868 1.35-5.01 3.99-5.676 7.176zM9.6 2.052c.282.38 2.145 2.914 3.822 6 3.645-1.365 5.19-3.44 5.373-3.702-1.81-1.61-4.19-2.586-6.795-2.586-.825 0-1.63.1-2.4.285zm10.335 3.483c-.218.29-1.935 2.493-5.724 4.04.24.49.47.985.68 1.486.08.18.15.36.22.53 3.41-.43 6.8.26 7.14.33-.02-2.42-.88-4.64-2.31-6.386z"/></svg></a>
+        <a class="soc" href="#" aria-label="Behance (link coming soon)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M0 4.4v15.2h7.17c1.6 0 2.85-.37 3.77-1.1.92-.74 1.38-1.8 1.38-3.18 0-.86-.2-1.58-.62-2.16-.42-.58-1.02-.98-1.8-1.2.6-.28 1.06-.66 1.36-1.14.3-.48.45-1.05.45-1.7 0-1.28-.43-2.24-1.3-2.88-.86-.64-2.13-.96-3.8-.96H0zm15.62 1.02v1.65h5.95V5.42h-5.95zM3.28 6.9h3.13c.7 0 1.24.14 1.6.43.37.28.55.72.55 1.3 0 .6-.18 1.05-.55 1.34-.36.28-.9.43-1.6.43H3.28V6.9zm14.7 2.5c-1.5 0-2.72.47-3.64 1.42-.92.94-1.38 2.2-1.38 3.76 0 1.6.45 2.85 1.34 3.77.9.9 2.16 1.36 3.8 1.36 1.3 0 2.38-.28 3.24-.85.86-.57 1.42-1.36 1.68-2.37h-2.72c-.13.4-.36.7-.7.9-.32.2-.74.3-1.25.3-.66 0-1.18-.18-1.55-.55-.37-.37-.58-.9-.62-1.57h7.06c.02-.16.03-.32.04-.48 0-.16.01-.32.01-.48 0-1.47-.44-2.66-1.32-3.55-.88-.9-2.05-1.35-3.5-1.35zm.03 1.9c.57 0 1.03.16 1.38.48.34.32.54.78.6 1.36h-4.05c.1-.6.32-1.05.66-1.37.34-.32.8-.48 1.42-.48zM3.28 12.3h3.4c.76 0 1.34.15 1.74.45.4.3.6.77.6 1.4 0 .64-.2 1.1-.6 1.4-.4.3-.98.45-1.74.45h-3.4v-3.7z"/></svg></a>
+        <a class="soc" href="#" aria-label="Instagram (link coming soon)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+      </div>
+      </div>
+      <div class="foot-base">
+        <span class="foot-copy"><span class="c">&copy;</span> Andy Eisenberg 2026</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- CASE STUDY LIGHTBOX (addressable via #case/slug) -->
+<div class="case-lb" id="case-lb" role="dialog" aria-modal="true" aria-label="Case study">
+  <button class="cl-close" id="cl-close" aria-label="Close case study">&times;</button>
+  <div class="case-panel" id="case-content"></div>
+</div>
+<div id="case-store" hidden>
+  <template data-case="good-game-background">
+    <article class="case-article">
+      <span class="cl-eyebrow">ABC &middot; Case study</span>
+      <h2 class="cl-title">Good Game Background</h2>
+      <div class="cl-topics"><span>Expressions</span><span>After Effects</span><span>MOGRTs</span></div>
+
+      <p class="cl-lead">A customizable After Effects background with randomizable hexes and icons, and eight swappable colors, all driven by two sliders, so the client never has to open After Effects.</p>
+
+      <p>This was a fun one. A broadcast client came to me wanting a background with a video game look. Something bright and fun, but with enough restraint that it wouldn&rsquo;t fight with whatever they laid on top. The catch was they wanted it to look a little different every single time they used it, available in a handful of colors, and simple enough that they wouldn&rsquo;t have to go into After Effects to change it.</p>
+
+      <h3>Initial scope</h3>
+      <p>When the brief came through, they wanted a background they could use on social and broadcast: a fun, video game look, but not so busy that it distracted from whatever went on top. They had a couple of requirements:</p>
+      <ol>
+        <li>A simple way to change the background so each time they used it, it could look slightly different.</li>
+        <li>A variety of colors (we ended up with eight they could swap between).</li>
+      </ol>
+      <p>Relatively straightforward. So I went about doing some initial designs, and you can see the evolution we landed on below.</p>
+      <div class="cl-figrow">
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Design-Evoloution_001.jpg" alt="Good Game background, design draft 1" loading="lazy"></span>
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Design-Evoloution_002.jpg" alt="Good Game background, design draft 2" loading="lazy"></span>
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Design-Evoloution_003.jpg" alt="Good Game background, design draft 3" loading="lazy"></span>
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Design-Evoloution_004.jpg" alt="Good Game background, design draft 4" loading="lazy"></span>
+      </div>
+
+      <p>We got the design settled in its entirety before I began any of the scripting and UI, which tends to be the way to do it and save yourself some headaches. Most new folks, when they start a project they know is going to involve MOGRT work, try to set that side up first, or in parallel with the design phase. I&rsquo;m here to tell you: no. Please don&rsquo;t do that. I&rsquo;m begging y&rsquo;all to stop doing that.</p>
+      <p>The number of times I open a project where they&rsquo;ve already got a huge list of properties in the Essential Graphics panel and the client hasn&rsquo;t even seen a design is astronomical. It is very, very easy to add properties after you&rsquo;ve finished the animation and design. Get your look finished and approved first, then go into rigging up the nuts and bolts. Speaking of which&hellip;</p>
+
+      <h3>The nuts and bolts</h3>
+      <p>Now that the look was signed off, I started mapping out the guts of this thing. Going back to the brief and the design, I came up with the variables I&rsquo;d have to deal with:</p>
+      <ul>
+        <li>The hexes</li>
+        <li>The icon inside each hex</li>
+        <li>The color of:
+          <ul>
+            <li>The hexes</li>
+            <li>The icons</li>
+            <li>The background</li>
+          </ul>
+        </li>
+      </ul>
+      <p>Keeping the client&rsquo;s &ldquo;keep it simple&rdquo; requirement in mind, I tied everything to two slider controls: one to randomize the hex and icon (so each iteration looks different), and another for color. The client didn&rsquo;t care about the individual icons as long as they varied.</p>
+      <p>I didn&rsquo;t want a system where they had to adjust every single icon and hex by hand. Sometimes with MOGRTs people feel like the more properties the better; let the editor control everything. Sometimes that&rsquo;s necessary. Most of the time it isn&rsquo;t. You don&rsquo;t want the editor groaning every time they pull your asset into their timeline because they&rsquo;ve got 50 sliders to set.</p>
+
+      <h3>Icons</h3>
+      <p>I decided early that I wanted one comp to hold all the icons and one to hold all the hex styles. Each icon is cut to exactly one frame, then run down the timeline, so icon 1 starts at frame 0, icon 2 at frame 1, icon 3 at frame 2, and so on.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Icon-Comp-Screenshot.png" alt="Icon comp: each icon cut to a single frame down the timeline" loading="lazy"></figure>
+      <p>I put that comp into the master background comp and created a &ldquo;Master Null.&rdquo; On most of my MOGRT projects I make a master null at the top of the timeline to hold the controls and hook everything up to it. It&rsquo;s one layer holding all the properties I&rsquo;ll eventually bring into Essential Graphics, so I don&rsquo;t have to hunt through layers.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Icon-Comp-MasterNull-Screenshot.png" alt="Master Null at the top of the timeline holding the controls" loading="lazy"></figure>
+      <p>I froze the icon comp and wrote an expression so that every time the Design slider changed, it would pick a random frame. Take the slider value, use <code>random()</code> to generate a number, and multiply by .04 (one frame is .04 of a second at 25fps) to land on a single frame:</p>
+      <pre><code>var input = thisComp.layer("MASTER NULL").effect("Design")("Slider");
+var totalIconSize = comp("ICON").numLayers;
+seedRandom(input, true);
+Math.floor(random(0, totalIconSize))*.04; // @ 25fps</code></pre>
+      <div class="cl-figrow cl-figrow--3">
+        <figure class="cl-cell"><span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Slider-Icon-Only_001.png" alt="Slider: 1 - Icon: 5" loading="lazy"></span><figcaption>Slider: 1 - Icon: 5</figcaption></figure>
+        <figure class="cl-cell"><span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Slider-Icon-Only_002.png" alt="Slider: 25 - Icon: 7" loading="lazy"></span><figcaption>Slider: 25 - Icon: 7</figcaption></figure>
+        <figure class="cl-cell"><span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Slider-Icon-Only_003.png" alt="Slider: 4065 - Icon: 2" loading="lazy"></span><figcaption>Slider: 4065 - Icon: 2</figcaption></figure>
+      </div>
+
+      <h3>Hexes</h3>
+      <p>The hexes were a bit different, since they had a subtle looping motion, so lining them all up down a timeline wouldn&rsquo;t work. Instead I set up a hex precomp holding all the different hexes and switched between them, using the same idea to randomly pick a number and turn the right layer on or off:</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Hex-Comp_Screenshot.png" alt="Hex precomp holding the different hex styles" loading="lazy"></figure>
+      <pre><code>if(thisComp.layer("SUB NULL").effect("Design")("Slider") == thisLayer.index) {100} else {0}</code></pre>
+      <p>I needed a separate &ldquo;sub null&rdquo; to generate the random number rather than hooking each layer up directly. Otherwise, each layer would generate its own number, and you&rsquo;d sometimes get two layers on, or none. Doing it this way guarantees one number that every layer reads.</p>
+
+            <div class="cl-figrow cl-figrow--3 cl-figrow--inset">
+        <figure class="cl-cell"><span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Hex-Icon_001.png" alt="Slider: 1 - Icon: 5 Hex: 2" loading="lazy"></span><figcaption>Slider: 1 - Icon: 5 Hex: 2</figcaption></figure>
+        <figure class="cl-cell"><span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Hex-Icon_002.png" alt="Slider: 30 - Icon: 4 Hex: 4" loading="lazy"></span><figcaption>Slider: 30 - Icon: 4 Hex: 4</figcaption></figure>
+        <figure class="cl-cell"><span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Hex-Icon_003.png" alt="Slider: 256 - Icon: 12 Hex: 1" loading="lazy"></span><figcaption>Slider: 256 - Icon: 12 Hex: 1</figcaption></figure>
+      </div>
+      <h3>Multiples</h3>
+      <p>Now that I have one working, I want to break this out to multiple hexes with multiple Icons. Because we&rsquo;re using random properly, every time this slider moves, every icon and every hex is going to be different. I just quickly set one up as an example. The difference between these two screens was all caused just by shifting one slider by one:</p>
+      <div class="cl-grid2">
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Honeycomb_001.png" alt="Honeycomb of multiple hexes and icons, one slider position" loading="lazy"></span>
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/Honeycomb_002.png" alt="Honeycomb of multiple hexes and icons, the slider shifted by one" loading="lazy"></span>
+      </div>
+      <p>From there, it was just breaking out to the different colors and altering the scale and position of these hexes and we got the design in different colors:</p>
+      <div class="cl-grid8">
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/EndBG_001.jpg" alt="Final Good Game background, color 1" loading="lazy"></span>
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/EndBG_002.jpg" alt="Final Good Game background, color 2" loading="lazy"></span>
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/EndBG_003.jpg" alt="Final Good Game background, color 3" loading="lazy"></span>
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/EndBG_004.jpg" alt="Final Good Game background, color 4" loading="lazy"></span>
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/EndBG_005.jpg" alt="Final Good Game background, color 5" loading="lazy"></span>
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/EndBG_006.jpg" alt="Final Good Game background, color 6" loading="lazy"></span>
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/EndBG_007.jpg" alt="Final Good Game background, color 7" loading="lazy"></span>
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/ABC%20-%20Good%20Game/web/EndBG_008.jpg" alt="Final Good Game background, color 8" loading="lazy"></span>
+      </div>
+      <p>So, I don&rsquo;t want to make this too long, but in the future, I might break this out and talk more about how I did the color breakdown and tied that in but I think that&rsquo;s enough for now. Feel free to reach out if you have any questions or want to know more. Happy to explain anything in more depth. Cheers!</p>
+      <footer class="cl-footer"><span class="cl-foot-dot"></span>Good Game Background</footer>
+    </article>
+  </template>
+  <template data-case="resolution-adaption-graphics">
+    <article class="case-article">
+      <span class="cl-eyebrow">Case study</span>
+      <h2 class="cl-title">Resolution Adaption Graphics</h2>
+      <div class="cl-topics"><span>After Effects</span><span>Template</span><span>MOGRTs</span></div>
+
+      <p class="cl-lead">How to create a single After Effects mogrt that adapts a graphic to multiple resolutions (16×9, 9×16, 1×1) using a master switch in a master composition.</p>
+
+      <p>Years and years ago, it was maybe a bit easier on resolution. You really had 2 formats you designed for; 4x3 and 16x9. And what was about it. You were either doing graphics for a show in one or the other. Times we&rsquo;re simpler (well, in this department. Ask anyone from then about doing a frame pulldown and their eye might start twitching.)</p>
+      <p>But now, thanks to social media, we&rsquo;re dealing with all sorts of different frame sizes. What an exciting time to be alive.</p>
+
+      <h3>How to do it</h3>
+      <p>Let me take you through how I solve this issue when I have a client who&rsquo;s going to output to various different platforms. It&rsquo;s pretty standard now a days for a campaign to run with similar visuals on broadcast, social and digital so we&rsquo;d like a single asset that can adapt to all of them. I have a lower third for a small business down there that I made that needed to be used in exactly that way.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Adaptive%20Lower%20Third/web/image1.png" alt="Lower third graphic" loading="lazy"></figure>
+      <p>So, first things first, get the design approved. As with almost all automation things, when dealing with clients, make sure they approved the look, feel and timing of the piece before going through the process of adapting it to various resolutions. You don&rsquo;t want to make more work for yourself and having a client come back down the track asking you to &ldquo;speed it up&rdquo; or &ldquo;make the logo bigger&rdquo; or &ldquo;make the name smaller&rdquo; (jk, no client has ever asked for their name to be smaller.)</p>
+      <p>From there we then adapt the design to work in all the possible resolutions we&rsquo;re going to need. For this example, let me just use the three most common ones: 16x9, 9x16, and 1x1.</p>
+      <div class="cl-two">
+        <img src="Gallery/Case%20Study%20Images/Adaptive%20Lower%20Third/web/image2.gif" alt="Lower third adapted to 16x9" loading="lazy">
+        <img src="Gallery/Case%20Study%20Images/Adaptive%20Lower%20Third/web/image3.gif" alt="Lower third adapted to 9x16" loading="lazy">
+      </div>
+      <p>I just did two adaptions at the start, a horizontal one and a vertical one because with some resolutions, you can just move one of these two into the right place and that&rsquo;ll work. You&rsquo;ll see as we go on.</p>
+      <p>But, now that I have these two I need to set up a master comp that&rsquo;ll end up being the actual mogrt we export.</p>
+
+      <h3>Master Comp</h3>
+      <p>So, I&rsquo;ve got my main adaptions and now I&rsquo;m going to make a comp that&rsquo;s the max horiztonal size and max vertical size of all the adaptions we&rsquo;re putting together. In this case the biggest horizontal size is 1920 and the biggest vertical is also 1920. So i&rsquo;m going to make a comp that&rsquo;s 1920x1920.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Adaptive%20Lower%20Third/web/image4.png" alt="Empty 1920x1920 master comp" loading="lazy"></figure>
+      <p>Now, i&rsquo;m going to drag my two comps into this larger comp and make sure they&rsquo;re centered. I&rsquo;m also going to set up a master null for this comp cause I&rsquo;m going to want a control somewhere that a I can rig up so we can easily switch between the resolutions. I always like putting global controls on a master null (even if it&rsquo;s just a single property.)</p>
+      <p>So, I&rsquo;ve got my two comps in there, my master null, and now I&rsquo;m also going to put a piece of text in the center stating 2 things, what this comp is and asking the user to set a property. Because we are using a big square comp, when we set a poster time, the thumbnail is going to look weird so I use this piece of text as a landing and insturction page</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Adaptive%20Lower%20Third/web/image5.png" alt="Text staging and instruction screen in the master comp" loading="lazy"></figure>
+      <p>Now that I have my elements, I just need to rig them all to a drop down expression control that will show each resolution when selected.</p>
+      <p>A dropdown expression controller is a fun little bit of tech. Basically clicking on the edit button in the corner lets you edit the options with your own text which is assigned to a specific and exact number. You can see here I put all our resolutions in place.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Adaptive%20Lower%20Third/web/image6.png" alt="Edited dropdown expression control options" loading="lazy"></figure>
+      <p>For something like this, you could use a slider control and you&rsquo;ll see in this project, i use slider controls for color options but when deciding which control to use, I run a test in my head. I pretend there&rsquo;s a producer behind me and they&rsquo;re overseeing the production of this asset. If it&rsquo;s a property that a producer is going to think about and want to quickly see varying options for, like color, I hook it up to a slider. If it&rsquo;s something exact, I hook it up to a dropdown. The reason i do that, is the usability inside the essential graphics panel. A slider is something I can slide and easily shuffle through options and a producer is going to want to quickly go back and forth between option 2 and 3 and then option 3 and 1 and then option 3 and 4 (and then for some reason 2 and 3 again) while they&rsquo;ll almost certainly not want to swap between resolution options.</p>
+      <p>As for the expressions, It&rsquo;s easy. I&rsquo;m just hooking up the opacity of each layer to a number in the dropdown menu. If its 1, show the text (which i&rsquo;ll also make sure is our default state); 2 is our 16x9 comp and 3 or 4 is our vertical comp.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Adaptive%20Lower%20Third/web/image7.png" alt="Timeline with comp opacity linked to the dropdown" loading="lazy"></figure>
+      <p>I also make sure that for our 1x1 comp, we move the 9x16 comp up to the right spot by using this expression in the Y position.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Adaptive%20Lower%20Third/web/image8.png" alt="Timeline with comp opacity and position expressions" loading="lazy"></figure>
+      <pre><code>if(thisComp.layer("MASTER NULL").effect("RESOLUTION CONTROL")("Menu") == 4) {678} else {960}</code></pre>
+      <p>Now, when the editor picks a resolution, it&rsquo;ll only show the lower third in the right place for that resolution.</p>
+      <p>As for rest of the properties, we have a few options but the easiest way I&rsquo;ve found, and the one that is least likely to break is to set one of these comps properties to the essential graphics panel in this master comp and then have all the rest, read and replicate that comps properties. So for example here, I have the 16x9 comp&rsquo;s text and color controls added to this master comp&rsquo;s essential graphics panel AND i have the 9x16 comp expression linked to the the 16x9 comps</p>
+      <p>Now, I have a staging screen and all 3 resolutions in the same mogrt. The editor can play with it from there. In addition, now. In an actual production workflow, it&rsquo;s very common in Premiere for editors, once they have an edit locked and need to convert it to other resolutions, they&rsquo;ll duplicate that sequence and then adjust the footage spatially. This sort of graphic also means, that instead of having to readjust graphics, the editor can just select the new resolution and the graphic will fit that resolution automatically, keeping intact the options and properties have have already been put in there.</p>
+
+      <div class="cl-figrow cl-figrow--3">
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/Adaptive%20Lower%20Third/web/image9.png" alt="Final lower third, example 1" loading="lazy"></span>
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/Adaptive%20Lower%20Third/web/image10.png" alt="Final lower third, example 2" loading="lazy"></span>
+        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/Adaptive%20Lower%20Third/web/image11.png" alt="Final lower third, example 3" loading="lazy"></span>
+      </div>
+      <footer class="cl-footer"><span class="cl-foot-dot"></span>Resolution Adaption Graphics</footer>
+    </article>
+  </template>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Video player">
+  <div class="lb-stage">
+    <button class="lb-close" id="lbClose" aria-label="Close video">&times;</button>
+    <div class="lb-frame" id="lbFrame"></div>
+    <div class="lb-title" id="lbTitle"></div>
+  </div>
+</div>
+
+<script>
+// Crossfade the unlabeled frames through their still sets.
+// Randomised on every load: shuffled order, random starting image, and jittered timing
+// so no two loads (and no two frames) share the same pattern.
+const shuffle = (a) => {                                   // Fisher-Yates (in place)
+  for (let k = a.length - 1; k > 0; k--) {
+    const j = Math.floor(Math.random() * (k + 1));
+    [a[k], a[j]] = [a[j], a[k]];
+  }
+  return a;
+};
+
+document.querySelectorAll('.frame-cluster .slides').forEach((s, si) => {
+  const imgs = [...s.querySelectorAll('img')];
+  if (imgs.length < 2) return;
+
+  if (s.closest('.fc1')) {
+    // ---- Showreel window: reveal method (no cross-dissolve wash) ----
+    // The current image sits on top and fades OUT; the next image waits fully
+    // opaque underneath, so it's simply revealed — never a lighter mid-point.
+    const HOLD = 6200, FADE = 3200;
+    imgs.forEach(im => im.classList.remove('on', 'reel-hide'));  // drop 'on' so .reel-hide wins the opacity fade (else the base .on rule cancels the first fade)
+    let bag = shuffle([...imgs]);
+    let current = bag.shift();                                   // first image is random too
+    let queue = bag;                                            // remaining images, already shuffled (all ≠ current)
+    const refill = () => { queue = shuffle(imgs.filter(im => im !== current)); };  // each image once/cycle, no back-to-back
+    const layers = () => {
+      imgs.forEach(im => im.style.zIndex = '0');
+      if (queue[0]) queue[0].style.zIndex = '1';            // next, revealed underneath
+      current.style.zIndex = '2';                           // current, on top
+    };
+    layers();
+
+    (function loop(){
+      setTimeout(() => {
+        const prev = current;
+        prev.classList.add('reel-hide');                    // fade top out → reveal queue[0]
+        setTimeout(() => {
+          current = queue.shift();                          // revealed image is now current
+          if (!queue.length) refill();
+          layers();                                         // promote it to top, set the new next
+          prev.classList.remove('reel-hide');               // restore opacity while safely covered at the back
+          loop();
+        }, FADE);
+      }, HOLD);
+    })();
+  } else {
+    // ---- fc2 / fc3: original cross-dissolve, each still shows once before reshuffle ----
+    let order = shuffle([...imgs]);
+    let i = 0;
+    imgs.forEach(im => im.classList.remove('on'));
+    order[i].classList.add('on');
+    const hold = 5000 + si * 900;
+    const jitter = () => Math.floor(Math.random() * 900);
+    (function tick(){
+      setTimeout(() => {
+        order[i].classList.remove('on');
+        i++;
+        if (i >= order.length) {
+          const last = order[order.length - 1];
+          do { shuffle(order); } while (order.length > 1 && order[0] === last);
+          i = 0;
+        }
+        order[i].classList.add('on');
+        tick();
+      }, hold + jitter());
+    })();
+  }
+});
+
+// ---------- Portfolio lightbox ----------
+(function(){
+  const lb    = document.getElementById('lightbox');
+  const frame = document.getElementById('lbFrame');
+  const title = document.getElementById('lbTitle');
+  if(!lb) return;
+
+  // size the frame to the video's real aspect ratio (data-ar="w/h"), fitting the viewport
+  function sizeFrame(tile){
+    const parts = (tile.getAttribute('data-ar') || '16/9').split('/').map(Number);
+    const ratio = (parts[0] && parts[1]) ? parts[0] / parts[1] : 16/9;
+    const maxW = Math.min(1100, window.innerWidth * 0.96);
+    const maxH = window.innerHeight * 0.86;
+    let w = maxW, h = w / ratio;
+    if(h > maxH){ h = maxH; w = h * ratio; }
+    frame.style.aspectRatio = 'auto';
+    frame.style.width  = Math.round(w) + 'px';
+    frame.style.height = Math.round(h) + 'px';
+  }
+
+  function open(tile){
+    const id  = tile.getAttribute('data-vimeo');
+    const t   = tile.getAttribute('data-title') || '';
+    const tag = tile.getAttribute('data-tag') || '';
+    sizeFrame(tile);
+    if(id){
+      frame.innerHTML = '<iframe src="https://player.vimeo.com/video/'+id+
+        '?autoplay=1&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
+    } else {
+      frame.innerHTML = '<div class="lb-empty">Vimeo link TK<br>(this piece will play here)</div>';
+    }
+    title.innerHTML = tag ? tag + ' &nbsp;·&nbsp; <b>'+t+'</b>' : '<b>'+t+'</b>';
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close(){
+    lb.classList.remove('open');
+    frame.innerHTML = '';           // unload the iframe to stop playback
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.work-tile').forEach(t =>
+    t.addEventListener('click', () => open(t)));
+
+  // ----- Hover preview: muted, looping Vimeo background player, cross-dissolved over the still -----
+  const HOVER_DELAY = 130;
+
+  // Only reveal a preview once Vimeo is actually rendering *moving* frames (via the
+  // player's postMessage events) — so we dissolve still -> playing video, not still -> poster.
+  window.addEventListener('message', (e) => {
+    if(typeof e.data !== 'string' || e.origin.indexOf('vimeo') === -1) return;
+    let msg; try{ msg = JSON.parse(e.data); }catch(_){ return; }
+    const frame = Array.prototype.find.call(
+      document.querySelectorAll('.wt-preview'), f => f.contentWindow === e.source);
+    if(!frame) return;
+    if(msg.event === 'ready'){
+      // subscribe to playback progress
+      frame.contentWindow.postMessage(JSON.stringify({method:'addEventListener', value:'timeupdate'}), '*');
+    }else if(msg.event === 'timeupdate' && msg.data && msg.data.seconds > 0){
+      frame.classList.add('is-in');               // frames are advancing -> cross-dissolve in
+    }
+  });
+
+  document.querySelectorAll('.work-tile[data-vimeo]').forEach(tile => {
+    const media = tile.querySelector('.wt-media');
+    if(!media) return;
+    let timer = null, pv = null, fallback = null;
+    tile.addEventListener('mouseenter', () => {
+      timer = setTimeout(() => {
+        if(pv) return;
+        pv = document.createElement('iframe');
+        pv.className = 'wt-preview';
+        pv.setAttribute('allow', 'autoplay');
+        pv.setAttribute('tabindex', '-1');
+        pv.setAttribute('aria-hidden', 'true');
+        pv.src = 'https://player.vimeo.com/video/' + tile.getAttribute('data-vimeo') +
+                 '?background=1&autoplay=1&loop=1&muted=1&autopause=0';
+        // If the video isn't 16:9, upscale the iframe to COVER the tile (tile clips the overflow)
+        const ar = (tile.getAttribute('data-ar') || '16/9').split('/').map(Number);
+        if(ar[0] && ar[1]){
+          const Av = ar[0] / ar[1], Ac = 16/9;
+          if(Math.abs(Av - Ac) > 0.01){
+            pv.style.position = 'absolute';
+            pv.style.top = '50%'; pv.style.left = '50%';
+            pv.style.right = 'auto'; pv.style.bottom = 'auto';
+            pv.style.transform = 'translate(-50%, -50%)';
+            pv.style.maxWidth = 'none'; pv.style.maxHeight = 'none';
+            if(Av > Ac){ pv.style.width = (Av / Ac * 100) + '%'; pv.style.height = '100%'; }
+            else       { pv.style.width = '100%'; pv.style.height = (Ac / Av * 100) + '%'; }
+          }
+        }
+        media.appendChild(pv);
+        // safety net: if playback events never arrive (e.g. privacy-restricted), dissolve in anyway
+        fallback = setTimeout(() => { if(pv) pv.classList.add('is-in'); }, 1400);
+      }, HOVER_DELAY);
+    });
+    tile.addEventListener('mouseleave', () => {
+      clearTimeout(timer); clearTimeout(fallback);
+      if(pv){
+        const gone = pv; pv = null;
+        gone.classList.remove('is-in');            // fade back to the still
+        setTimeout(() => gone.remove(), 450);      // remove after the dissolve (--duration-slow)
+      }
+    });
+  });
+
+  // Hero showreel frame opens the same lightbox (click + keyboard)
+  const reel = document.querySelector('.fc1[data-vimeo]');
+  if(reel){
+    reel.addEventListener('click', () => open(reel));
+    reel.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); open(reel); }
+    });
+  }
+  document.getElementById('lbClose').addEventListener('click', close);
+  lb.addEventListener('click', e => { if(e.target === lb) close(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && lb.classList.contains('open')) close(); });
+})();
+
+// ---------- Portfolio tabs (word starts with grid, runs 3x longer, then body) ----------
+(function(){
+  let busy=false;
+  const tabs=[...document.querySelectorAll('.tab')];
+  const word=document.querySelector('.swap-word');
+  const lede=document.querySelector('.swap-lede');
+
+  // Timeline (ms from click):
+  //   grid : crossfade at base speed (out GRID_OUT, in ~250 via CSS)
+  //   word : starts WITH the grid, but each phase is 3x the grid swap
+  //   body : fades in after the word has finished
+  const GRID_OUT=250;                                   // grid swap unit (matches .tab-panel CSS ~250ms)
+  const WORD_START=0, WORD_OUT=600, WORD_IN=600;        // same start as grid
+  const BODY_OUT=200, BODY_IN_AT=1000, BODY_IN=600;     // body starts at 1s, eases in a hair faster
+  const LOCK=1200;
+
+  // fade el out, swap text once faded, then fade back in — every phase duration explicit
+  function fadeText(el, name, startDelay, outDur, inAt, inDur){
+    if(!el) return;
+    setTimeout(()=>{ el.style.transitionDuration = outDur+'ms'; el.classList.add('out'); }, startDelay);
+    setTimeout(()=>{ el.textContent = (el.dataset[name] != null) ? el.dataset[name] : el.textContent; }, startDelay + outDur);
+    setTimeout(()=>{ void el.offsetWidth; el.style.transitionDuration = inDur+'ms'; el.classList.remove('out'); }, inAt);
+  }
+
+  function activate(name){
+    const incoming=[...document.querySelectorAll('.tab-panel')].filter(el=>el.id==='panel-'+name);
+    if(busy || incoming.every(el=>el.classList.contains('active'))) return;
+    busy=true; setTimeout(()=>busy=false, LOCK);
+
+    // grid + word start together
+    const outgoing=[...document.querySelectorAll('.tab-panel.active')].filter(el=>!incoming.includes(el));
+    outgoing.forEach(el=>el.classList.remove('active'));
+    setTimeout(()=>{
+      outgoing.forEach(el=>el.classList.add('gone'));
+      incoming.forEach(el=>el.classList.remove('gone'));
+      void document.body.offsetWidth;
+      requestAnimationFrame(()=>incoming.forEach(el=>el.classList.add('active')));
+    }, GRID_OUT);
+
+    fadeText(word, name, WORD_START, WORD_OUT, WORD_START+WORD_OUT, WORD_IN);  // 3x-long word swap
+    fadeText(lede, name, 0, BODY_OUT, BODY_IN_AT, BODY_IN);                    // body last
+  }
+
+  tabs.forEach(t=>t.addEventListener('click',()=>{
+    tabs.forEach(x=>{x.classList.remove('active'); x.setAttribute('aria-selected','false');});
+    t.classList.add('active'); t.setAttribute('aria-selected','true');
+    activate(t.dataset.tab);
+  }));
+})();
+
+// ---------- Case study lightbox (addressable via #case/slug) ----------
+(function(){
+  const lb=document.getElementById('case-lb');
+  const panel=document.getElementById('case-content');
+  const store=document.getElementById('case-store');
+  if(!lb||!store) return;
+  function openSlug(slug){
+    const tpl=store.querySelector('[data-case="'+slug+'"]');
+    panel.innerHTML = tpl ? tpl.innerHTML : '<div class="cl-empty">This write-up is coming soon.</div>';
+    lb.classList.add('open'); lb.scrollTop=0; document.body.style.overflow='hidden';
+  }
+  function hardClose(){ lb.classList.remove('open'); panel.innerHTML=''; document.body.style.overflow=''; }
+  function route(){
+    const m=location.hash.match(/^#case\/(.+)$/);
+    if(m) openSlug(decodeURIComponent(m[1])); else hardClose();
+  }
+  function closeNav(){
+    if(location.hash.indexOf('#case/')===0){ history.replaceState('', document.title, location.pathname+location.search); }
+    hardClose();
+  }
+  document.querySelectorAll('.case-card').forEach(c=>c.addEventListener('click',()=>{
+    if(c.dataset.case) location.hash='#case/'+c.dataset.case;
+  }));
+  document.getElementById('cl-close').addEventListener('click', closeNav);
+  lb.addEventListener('click', e=>{ if(e.target===lb) closeNav(); });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && lb.classList.contains('open')) closeNav(); });
+  window.addEventListener('hashchange', route);
+  route();   // deep-link support on load
+})();
+
+// ---------- About tabs (Bio / CV) ----------
+(function(){
+  const tabs=[...document.querySelectorAll('.about-tab')];
+  if(!tabs.length) return;
+  tabs.forEach(t=>t.addEventListener('click',()=>{
+    tabs.forEach(x=>{ x.classList.remove('active'); x.setAttribute('aria-selected','false'); });
+    document.querySelectorAll('.about-panel').forEach(p=>p.classList.remove('active'));
+    t.classList.add('active'); t.setAttribute('aria-selected','true');
+    const panel=document.getElementById('abt-'+t.dataset.tab);
+    if(panel) panel.classList.add('active');
+  }));
+})();
+
+// ---------- Side-nav scroll spy (highlights the section you're viewing) ----------
+(function(){
+  const links = {};
+  document.querySelectorAll('.navlist a').forEach(a=>{
+    const id = (a.getAttribute('href')||'').replace('#','');
+    if(id) links[id] = a;
+  });
+  const ids = Object.keys(links);
+  const sections = ids.map(id=>document.getElementById(id)).filter(Boolean);
+  if(!sections.length) return;
+  function setActive(id){
+    ids.forEach(k=>links[k].classList.remove('active'));
+    if(links[id]) links[id].classList.add('active');
+  }
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) setActive(e.target.id); });
+  }, { rootMargin:'-35% 0px -55% 0px', threshold:0 });
+  sections.forEach(s=>io.observe(s));
+  // instant feedback on click; the observer settles it after the smooth scroll
+  Object.values(links).forEach(a=>a.addEventListener('click',()=>{
+    setActive((a.getAttribute('href')||'').replace('#',''));
+  }));
+})();
+</script>
+
+</body>
+</html>
