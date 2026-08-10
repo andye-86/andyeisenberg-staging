@@ -133,11 +133,45 @@ a{color:inherit;text-decoration:none}
 @media(max-width:860px){
   .sidenav{display:none}
   .main{margin-left:0}
-  .topbar{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;padding:12px 18px;background:var(--grey);border-bottom:1px solid rgba(0,0,0,.1)}
-  .topbar .tb-logo{background:var(--surface);border-radius:var(--radius-sm);padding:5px 9px;display:inline-flex}
+  .topbar{display:flex;flex-direction:column;gap:10px;position:sticky;top:0;z-index:50;padding:12px 18px;background:var(--grey);border-bottom:1px solid rgba(0,0,0,.1)}
+  .topbar .tb-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .topbar .tb-logo{background:var(--surface);border-radius:var(--radius-sm);padding:5px 9px;display:inline-flex;flex:0 0 auto}
   .topbar .tb-logo img{height:16px;width:auto;display:block}
-  .topbar .avail{font-size:.6rem;color:rgba(255,255,255,.88)}
-  .hero{padding:var(--space-5)}
+  .topbar .tb-nav{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px 14px}
+  .topbar .tb-nav a{font-family:var(--font-display);font-weight:600;font-size:.72rem;color:#fff;white-space:nowrap}
+  .topbar .tb-contact{display:flex;flex-wrap:wrap;gap:4px 14px;background:var(--surface);border-radius:var(--radius-sm);padding:8px 12px;font-family:var(--font-mono);font-size:.7rem}
+  .topbar .tb-contact a{color:var(--charcoal);white-space:nowrap}
+  .hero{padding:var(--space-5) var(--space-4); min-height:0; display:block}
+
+  /* ---------- Hero: single vertical white box on mobile ----------
+     Desktop hero-stage is a fixed-aspect, absolutely-positioned composition
+     tuned for a 1200px canvas — it doesn't reflow, it just breaks. On mobile
+     we drop the aspect-ratio/absolute layout entirely: hero-stage becomes the
+     one white surface (bg/radius/shadow live here now), and intro-card +
+     frame-cluster become plain stacked flex children inside it, in document
+     order: headline → body copy → Motion Reel (fc1) → gallery frame (fc2,
+     peeking out from behind fc1). fc3 and the CTA buttons are dropped. */
+  .hero-stage{
+    width:100%; max-width:440px; margin:0 auto; aspect-ratio:unset; position:static;
+    background:var(--surface); border-radius:var(--radius-lg); box-shadow:var(--shadow-card);
+    padding:var(--space-6) var(--space-5); display:flex; flex-direction:column; overflow:hidden;
+  }
+  .intro-card{ position:static; transform:none; width:100%; background:transparent; box-shadow:none; border-radius:0; padding:0; }
+  .intro-content{ transform:none; }
+  .intro-card .headline-vector{ transform:none; margin-bottom:var(--space-4); }
+  .intro-card .headline-vector svg{ max-width:100%; }
+  .intro-body{ font-size:1rem; line-height:1.6; max-width:100%; margin-top:0; transform:none; }
+  .hero-cta{ display:none; }
+
+  .frame-cluster{ position:static; inset:auto; transform:none; pointer-events:auto; display:flex; flex-direction:column; align-items:center; margin-top:var(--space-6); }
+  .frame-cluster .photo-frame{ position:static; }
+  .frame-cluster .fc1{ width:100%; transform:none; z-index:2; }
+  .frame-cluster .fc1:hover{ transform:none; }
+  .frame-cluster .photo-frame--labeled .cap{ font-size:.8rem; text-align:center; }
+  .frame-cluster .fc1 .reel-play::before{ width:56px; height:56px; }
+  .frame-cluster .fc2{ width:88%; transform:rotate(-2deg); z-index:1; margin:-30px auto 0; }
+  .frame-cluster .fc2:hover{ transform:rotate(-2deg); }
+  .frame-cluster .fc3{ display:none; }
 }
 
 /* =====================================================================
@@ -190,10 +224,7 @@ a{color:inherit;text-decoration:none}
   #portfolio{ scroll-margin-top:60px; }
 }
 @media(max-width:680px){
-  .work-wall{ grid-template-columns:repeat(2,1fr); }
-}
-@media(max-width:440px){
-  .work-wall{ grid-template-columns:1fr; }
+  .work-wall{ grid-template-columns:repeat(2,1fr); gap:var(--space-3); }
 }
 
 /* ---------- Tabs (Motion / Case Studies) ---------- */
@@ -319,7 +350,7 @@ a{color:inherit;text-decoration:none}
    Reuses .section + .section-head from Portfolio; only the card is new.
    ===================================================================== */
 .code-wall{ max-width:var(--content-max); margin:0 auto; display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-5); }
-.code-card{ position:relative; display:flex; flex-direction:column; background:var(--surface); border-radius:var(--radius-md);
+.code-card{ position:relative; display:flex; flex-direction:column; min-width:0; background:var(--surface); border-radius:var(--radius-md);
   box-shadow:var(--shadow-card); overflow:clip; padding:var(--space-4) var(--space-4) var(--space-3);
   transition:transform var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard); }
 .code-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-lift); }
@@ -351,7 +382,12 @@ a{color:inherit;text-decoration:none}
 .code-card:hover .code-link{ color:var(--interactive-hover); }
 .code-card:hover .code-link .arrow{ transform:translateX(3px); }
 
-@media(max-width:760px){ .code-wall{ grid-template-columns:1fr; } #code{ scroll-margin-top:60px; } }
+@media(max-width:760px){
+  .code-wall{ grid-template-columns:1fr; }
+  #code{ scroll-margin-top:60px; }
+  /* show only 4 of 6 Major cards on mobile (keeps both real ones: ae-project-sort, ae-color-palette-panel) */
+  .code-wall .code-card:nth-child(5), .code-wall .code-card:nth-child(6){ display:none; }
+}
 
 /* --- Code sub-heading (e.g. "Utilities") --- */
 .code-subhead{ max-width:var(--content-max); margin:var(--space-6) auto var(--space-5); padding-top:var(--space-5);
@@ -371,7 +407,11 @@ a{color:inherit;text-decoration:none}
 .util-card:nth-child(2) .dot, .util-card:nth-child(4) .dot, .util-card:nth-child(9) .dot{ background:var(--magenta); }
 .util-card:nth-child(3) .dot, .util-card:nth-child(5) .dot, .util-card:nth-child(7) .dot{ background:var(--yellow); }
 .util-desc{ font-family:var(--font-body); font-size:var(--text-xs); line-height:1.5; color:var(--text-secondary); }
-@media(max-width:760px){ .util-wall{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:760px){
+  .util-wall{ grid-template-columns:repeat(2,1fr); }
+  /* show only 6 of 9 utility cards on mobile */
+  .util-wall .util-card:nth-child(7), .util-wall .util-card:nth-child(8), .util-wall .util-card:nth-child(9){ display:none; }
+}
 @media(max-width:480px){ .util-wall{ grid-template-columns:1fr; } }
 
 /* --- "View more on GitHub" button under the utilities --- */
@@ -527,8 +567,19 @@ a{color:inherit;text-decoration:none}
 
 <!-- MOBILE TOP BAR -->
 <div class="topbar">
-  <span class="tb-logo"><img src="Logo/ColorLogo_RGB_Square.svg" alt="Andy Eisenberg"></span>
-  <div class="avail"><span class="dot"></span> Available</div>
+  <div class="tb-row">
+    <span class="tb-logo"><img src="Logo/ColorLogo_RGB_Square.svg" alt="Andy Eisenberg"></span>
+    <nav class="tb-nav">
+      <a href="#intro">Home</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#code">Code</a>
+      <a href="#about">About</a>
+    </nav>
+  </div>
+  <div class="tb-contact">
+    <a href="mailto:andy@andyeisenberg.com">andy@andyeisenberg.com</a>
+    <a href="tel:+61413096097">+61 413 096 097</a>
+  </div>
 </div>
 
 <div class="main">
