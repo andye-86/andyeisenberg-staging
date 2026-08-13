@@ -273,7 +273,7 @@ a{color:inherit;text-decoration:none}
   box-shadow:var(--shadow-card); overflow:clip; cursor:pointer;
   transition:transform var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard); }
 .case-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-lift); }
-.cc-media{ position:relative; aspect-ratio:16/9; background:var(--bg-page-2); display:flex; align-items:center; justify-content:center; }
+.cc-media{ position:relative; aspect-ratio:16/9; background:var(--bg-page-2); display:flex; align-items:center; justify-content:center; overflow:hidden; }
 .cc-media::after{ content:""; position:absolute; inset:0; pointer-events:none; box-shadow:var(--shadow-inset); }
 .cc-ph{ font-family:var(--font-mono); font-size:var(--text-xs); letter-spacing:var(--tracking-label); text-transform:uppercase; color:var(--text-secondary); }
 .cc-body{ padding:var(--space-4) var(--space-4) var(--space-5); }
@@ -284,7 +284,8 @@ a{color:inherit;text-decoration:none}
 @media(max-width:560px){ .case-wall{ grid-template-columns:1fr; } }
 
 /* Populated case card thumbnail */
-.cc-thumb{ width:100%; height:100%; object-fit:cover; display:block; }
+.cc-thumb{ width:100%; height:100%; object-fit:cover; display:block; transition:transform var(--duration-slow) var(--ease-standard); }
+.case-card:hover .cc-thumb{ transform:scale(1.06); }
 /* Good Game card: image fills the whole frame, 7deg tilt baked into the crop (scaled so rotation leaves no gaps) */
 .case-card[data-case="good-game-background"] .cc-media{ overflow:hidden; }
 .case-card[data-case="good-game-background"] .cc-thumb{ width:100%; height:100%; object-fit:cover; transform:rotate(7deg) scale(1.22); transition:transform var(--duration-slow) var(--ease-standard); }
@@ -338,12 +339,18 @@ a{color:inherit;text-decoration:none}
 .cl-grid2{ display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-3); margin:0 0 var(--space-5); }
 .cl-two{ display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); align-items:center; justify-items:center; margin:0 0 var(--space-5); }
 .cl-two img{ max-width:100%; max-height:440px; width:auto; height:auto; border-radius:var(--radius-sm); display:block; }
+.cl-two--framed img{ background:var(--surface); box-shadow:var(--shadow-card); padding:14px; box-sizing:border-box; border-radius:8px; max-height:400px; }
 @media(max-width:560px){ .cl-two{ grid-template-columns:1fr; } }
 .cl-grid8{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-2); margin:0 0 var(--space-5); }
 @media(max-width:560px){ .cl-grid8{ grid-template-columns:repeat(2,1fr); } }
 .cl-img{ position:relative; margin:0 0 var(--space-5); border-radius:var(--radius-sm); overflow:hidden; background:var(--bg-page-2); }
 .cl-img img{ width:100%; height:auto; display:block; }
 .cl-img::after{ content:""; position:absolute; inset:0; pointer-events:none; box-shadow:var(--shadow-inset); border-radius:inherit; }
+/* shows the full image, letterboxed on the shot's grey background, instead of cropping to fill */
+.cl-shot--contain img{ object-fit:contain; }
+/* white matte/frame treatment for a standalone cl-img figure */
+.cl-img--framed{ background:var(--surface); box-shadow:var(--shadow-card); padding:14px; }
+.cl-img--framed img{ border-radius:4px; }
 .cl-empty{ font-family:var(--font-mono); font-size:var(--text-sm); letter-spacing:.06em; text-transform:uppercase; color:var(--text-secondary); padding:var(--space-8) 0; text-align:center; }
 @media(max-width:560px){ .case-article .cl-title{ font-size:var(--text-2xl); } .case-panel{ padding:var(--space-7) var(--space-5); } }
 
@@ -867,17 +874,17 @@ a{color:inherit;text-decoration:none}
           </div>
         </article>
         <article class="case-card" data-case="sydney-university-mba-tds-course-design">
-          <div class="cc-media"><img class="cc-thumb" src="Gallery/Case%20Study%20Images/SydneyUni/CoverImage.png" alt="University of Sydney MBA TDS Graphics Package"></div>
+          <div class="cc-media"><img class="cc-thumb" src="Gallery/Case%20Study%20Images/SydneyUni/CoverImage.png" alt="University of Sydney MBA TDS Graphics"></div>
           <div class="cc-body">
-            <h3 class="cc-title">University of Sydney MBA TDS Graphics Package</h3>
-            <p class="cc-excerpt">Created a modular motion-graphics package with looping hero art, master comps, color sliders, and auto-resizing lower thirds to streamline video production for a 12-course online MBA.</p>
+            <h3 class="cc-title">University of Sydney MBA TDS Graphics</h3>
+            <p class="cc-excerpt">Technical design details for a modular motion-graphics package with looping hero art, master comps, color sliders, and auto-resizing lower thirds.</p>
           </div>
         </article>
-        <article class="case-card" data-case="case-04">
-          <div class="cc-media"><span class="cc-ph">Case study</span></div>
+        <article class="case-card" data-case="supermarket-speed-and-template-improvements">
+          <div class="cc-media"><img class="cc-thumb" src="Gallery/Case%20Study%20Images/Woolies/CoverImage.jpeg" alt="Supermarket Speed and Template Improvements"></div>
           <div class="cc-body">
-            <h3 class="cc-title">Case study 04</h3>
-            <p class="cc-excerpt">A short breakdown of the project (the brief, the build, and what made it work) will live here.</p>
+            <h3 class="cc-title">Supermarket Speed and Template Improvements</h3>
+            <p class="cc-excerpt">How naming conventions, automatic resizing, and standardized assets speed up production for weekly advertising.</p>
           </div>
         </article>
         <article class="case-card" data-case="case-05">
@@ -1383,13 +1390,12 @@ Math.floor(random(0, totalIconSize))*.04; // @ 25fps</code></pre>
   <template data-case="sydney-university-mba-tds-course-design">
     <article class="case-article">
       <span class="cl-eyebrow">University of Sydney &middot; Case study</span>
-      <h2 class="cl-title">University of Sydney MBA TDS Graphics Package</h2>
+      <h2 class="cl-title">University of Sydney MBA TDS Graphics</h2>
       <div class="cl-topics"><span>After Effects</span><span>Template</span><span>MOGRTs</span></div>
 
-      <p class="cl-lead">Created a modular motion-graphics package with looping hero art, master comps, color sliders, and auto-resizing lower thirds to streamline video production for a 12-course online MBA.</p>
+      <p class="cl-lead">Technical design details for a modular motion-graphics package with looping hero art, master comps, color sliders, and auto-resizing lower thirds.</p>
 
-      <p>So this was a massive project. Like one of the biggest projects I&rsquo;ve done before. I was on a team of producers, editors and designers who were tasked with doing the media production for 12 courses for an online MBA course at the University of Sydney. For me, this meant developing a motion graphics package that could be distributed to editors as they assembled literally 100s of videos.</p>
-      <p>With a project this massive, the key was developing a series of projects, templates and guidelines to keep things organised and efficient as we rolled out the graphics. These are just a couple of the features I built into this package so that things happened automatically and efficiently as we built this whole course out.</p>
+      <p>So this was a massive project and easily one of the biggest projects I&rsquo;ve done before. I was on a team of producers, editors and designers who were tasked with doing the media production for 12 courses within an online MBA course at the University of Sydney. In my role, this meant developing a motion graphics package that could be distributed to editors as they assembled literally 100s of videos. With a project this big, the key was developing a series of projects, templates and guidelines to keep things organised and efficient as we rolled out the package.</p>
 
       <h3>Loops</h3>
       <p>The central focus of this package was all around the Hero Art. For each of the 12 courses, each unit was going to have a piece of key art that related to each unit&rsquo;s primary tenets and focus.</p>
@@ -1399,24 +1405,24 @@ Math.floor(random(0, totalIconSize))*.04; // @ 25fps</code></pre>
         <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image3_Hero3.png" alt="MBA course hero art, option 3" loading="lazy"></span>
         <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image4_Hero4.png" alt="MBA course hero art, option 4" loading="lazy"></span>
       </div>
-      <p>Each of these pieces of key art was designed with great care by the visual designer on our team and then handed off to me for animation. I&rsquo;d animate them in an 8 second loop so the first and last frame was the same. As I said before, when dealing with unknowns, control what you do know. And while I didn&rsquo;t know exactly how each editor was going to use all the graphics, I knew that I didn&rsquo;t want to restrict the timing of our editors, so by making the key art into a looping asset, we weren&rsquo;t going to be restricted in future.</p>
-      <p>Loops are great for that as the asset can now run as long or as short as you need it to and my brain likes using 8 seconds as a good bench mark. 8 divides down nicely into 4, 2 and 1 meaning you can set up in the larger loop, smaller loops that run for 2 or 4 seconds and they&rsquo;ll all reset at 8. You can see here in this piece I have these dots on a 2 second loop, these things on a 4 second loop and this larger piece on an 8 second loop.</p>
+      <p>Each of these pieces of key art was designed by the team&rsquo;s visual designer and then handed off to me for animation and integration. I decided early to animate them in an 8 second loop. When dealing with unknowns, control what you do know. And while I didn&rsquo;t know exactly how each editor was going to use all the graphics, I knew that I didn&rsquo;t want to restrict the timing of our editors. Different courses might require this sort of hero art to be on for 3 seconds or 30 seconds depending on pacing and content. By making the key art into a looping asset, we weren&rsquo;t going to be restricted in future as the asset can now run as long or as short as you need it to.</p>
+      <p>For me, my brain likes using 8 seconds as a looping duration. 8 divides down nicely into 4, 2 and 1 meaning you can set up in the larger loop, smaller loops that run for 2 or 4 seconds and they&rsquo;ll all reset at 8. You can see here in this piece, I have these rings on a 2 second loop, these checkerboards on a 4 second loop and this arrow on an 8 second loop.</p>
       <div class="cl-figrow cl-figrow--3">
-        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image5_2SecondLoop.gif" alt="Dots on a 2 second loop" loading="lazy"></span>
-        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image6_4secondLoop.gif" alt="Elements on a 4 second loop" loading="lazy"></span>
-        <span class="cl-shot"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image7_8secondLoop.gif" alt="Larger piece on an 8 second loop" loading="lazy"></span>
+        <figure class="cl-cell"><span class="cl-shot"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image5_2SecondLoop.gif" alt="Rings on a 2 second loop" loading="lazy"></span><figcaption>2 second loop</figcaption></figure>
+        <figure class="cl-cell"><span class="cl-shot"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image6_4secondLoop.gif" alt="Checkerboards on a 4 second loop" loading="lazy"></span><figcaption>4 second loop</figcaption></figure>
+        <figure class="cl-cell"><span class="cl-shot"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image7_8secondLoop.gif" alt="Arrow on an 8 second loop" loading="lazy"></span><figcaption>8 second loop</figcaption></figure>
       </div>
       <p>But when put together, they all hit at 8 and form a seamless loop.</p>
       <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image8_FullLoop.gif" alt="Full 8 second hero art loop" loading="lazy"></figure>
 
       <h3>Structure</h3>
-      <p>So, knowing that key art was going to be used throughout the graphic package, I needed to structure these assets in a way that made it easy for the editors to switch between assets, so I placed these loops into a master key art comp.</p>
+      <p>Knowing that key art was going to be used throughout the graphic package, I needed to structure these assets in a way that made it easy for the editors to switch between them. This meant placing the looping assets into a master key art comp.</p>
       <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image9_MasterHeroArt.png" alt="Master key art comp" loading="lazy"></figure>
       <p>This master comp was then used throughout all the other standard graphic templates. If there was a section that required key art, in a frame, we would insert this master comp instead of the individual key art. From here, it was hooked up to a slider control and then the editor just had to enter the number of the course they were working on and the key art would update within that template correctly.</p>
       <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image10_Thumbnail1.png" alt="Master key art comp, course thumbnail 1" loading="lazy"></figure>
       <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image11_Thumbnail2.png" alt="Master key art comp, course thumbnail 2" loading="lazy"></figure>
       <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image12_Thumbnail3.png" alt="Master key art comp, course thumbnail 3" loading="lazy"></figure>
-      <p>I did a similar thing with the color controls necessary. We standardized the colors pretty early in the process so instead of just putting those colors into each template individually, I made a master expression that swapped between those colors when necessary.</p>
+      <p>Similar things were done with the color controls. We standardized the colors pretty early in the process so instead of just putting those colors into each template individually, I made a master expression that swapped between those colors when necessary.</p>
       <pre><code>var numb1= Math.round(thisComp.layer("MASTER NULL").effect("Primary Color")("Slider").value);
 
 if(numb1 &gt;= 7 || numb1 &lt;= 0){
@@ -1431,9 +1437,9 @@ comp("Color Control").layer("MASTER COLOR NULL").effect(detNum).color</code></pr
       <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image14_LowerThirds.png" alt="Lower third with swappable brand colors" loading="lazy"></figure>
 
       <h3>Automatic Design</h3>
-      <p>Speaking of the lower third, it&rsquo;s a good example of some other automatic design functions I built into the package. With the lower thirds, we wanted the design to show or hide information and resize itself automatically depending on what was needed. If there was a need for 3 lines of text, the lower third needed all three lines visible but if we only needed 2 lines, that third line should hide itself, the animation should not be affected.</p>
+      <p>Speaking of the lower third, it&rsquo;s a good example of some other automatic design functions I built into the package. With the lower thirds, we wanted the design to show or hide information and resize itself automatically depending on what was needed. If there was a need for 3 lines of text, the lower third needed all three lines visible but if we only needed 2 lines, that third line should hide itself, the overall box of the lower third should resize but the animation should be unaffected.</p>
       <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image15_LowerThirds_LineCorrection.png" alt="Lower third automatically hiding an unused line" loading="lazy"></figure>
-      <p>The bar was also supposed to be big enough for all the text. This presented an issue though as we were never going to know what line of text was going to be the longest. Someone might have a long name and a short title or someone might have the exact opposite so the lower third had to figure out which line was the longest. This came down to writing an expression that was able to read all three lines of text, find the longest and use that as the determining factor for the overall size of the box.</p>
+      <p>The length of the lower third also resizes with the length of the text. This presented an issue though as we were never going to know what line of text was going to be the longest. Someone might have a long name and a short title and someone might have the exact opposite. So, the lower third itself had to figure out which line was the longest. This came down to writing an expression that was able to read all three lines of text, find the longest and use that as the determining factor for the overall size of the box:</p>
       <pre><code>var rCheck = thisComp.layer("MASTER NULL").effect("Right Check")("Checkbox");
 if (rCheck == true) {
   [0, 540];
@@ -1455,9 +1461,89 @@ if (rCheck == true) {
   [1920 - widthOfBox, 540];
 }</code></pre>
       <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/SydneyUni/Image16_LowerThird_AutoResize.png" alt="Lower third automatically resizing to fit the longest line" loading="lazy"></figure>
-      <p>This takes away an ask from the editor. I&rsquo;ve seen lower third designs in the past where either the editor was asked to resize the box manually with a slider in the essential graphics or they would have to tell the template which line was the biggest but with some smart, well-crafted expressions, we can get the template to do the work for us. If you can make something happen automatically inside the comp without involving human input, things move faster, easier and are less prone to errors.</p>
+      <p>This takes away an ask from the editor. I&rsquo;ve seen lower third designs in the past where either the editor was asked to resize the box manually with a slider or they would have to tell the template which line was the biggest but with some smart, well-crafted expressions, we can get the template to do the work for us. If you can make something happen automatically inside the comp, without involving human input, things move faster, easier and are less prone to errors.</p>
 
-      <footer class="cl-footer"><span class="cl-foot-dot"></span>University of Sydney MBA TDS Graphics Package</footer>
+      <footer class="cl-footer"><span class="cl-foot-dot"></span>University of Sydney MBA TDS Graphics</footer>
+    </article>
+  </template>
+  <template data-case="supermarket-speed-and-template-improvements">
+    <article class="case-article">
+      <span class="cl-eyebrow">Case study</span>
+      <h2 class="cl-title">Supermarket Speed and Template Improvements</h2>
+      <div class="cl-topics"><span>After Effects</span><span>Template</span><span>Automation</span></div>
+
+      <p class="cl-lead">How naming conventions, automatic resizing, and standardized assets speed up production for weekly advertising.</p>
+
+      <p>Sometimes, speed is a vital part of the design process. Sometimes you&rsquo;re lucky and get a client with a massive budget for whom you can spend days on research and experimentation. But, just as likely, you&rsquo;ll get clients where speed is an important part of the business.</p>
+      <p>I had a client that needed to turn out a set of ads every week. They were a national grocery chain whose sales changed week by week and each new week meant new sales and new sales meant a new spot. And this would go on for nearly every week of the year so they needed a template system that allowed them to not just produce quickly but produce consistently at scale.</p>
+      <p>So, over the years, I started building small bits of smart expressions and quality of life enhancements into their templates and systems to assist in making sure things got done fast.</p>
+
+      <h3>Comp Naming Conventions</h3>
+      <p>One of the easiest areas to squeeze time out of was by making sure I wasn&rsquo;t repeating tasks or entering the same information twice. I wanted a way to enter the price information once (in the name of the precomp) and then have that information flow to wherever I needed it in the actual design itself.</p>
+      <p>So when I change the precomp name, the price would update and that&rsquo;s what happens here.</p>
+      <div class="cl-two cl-two--framed">
+        <img src="Gallery/Case%20Study%20Images/Woolies/Image01_Price1.png" alt="Price precomp, first example" loading="lazy">
+        <img src="Gallery/Case%20Study%20Images/Woolies/Image02_Price2.png" alt="Price precomp, name changed and price updated" loading="lazy">
+      </div>
+      <p>Several expressions located in the source text property of the text layers read that comp name, parse the data that&rsquo;s appropriate for them and then change to what needs to be changed.</p>
+      <pre><code>var compName = thisComp.name;
+
+// Strip "PRICE " prefix
+var raw = compName.substring(compName.indexOf(" ") + 1);
+
+// Unit is always the last 2 characters
+var unit = raw.substring(raw.length - 2);
+
+// Check for a dot
+var dotIndex = raw.indexOf(".");
+var dollars;
+var cents;
+if (dotIndex !== -1) {
+  dollars = raw.substring(0, dotIndex);
+  cents = raw.substring(dotIndex + 1, dotIndex + 3);
+} else {
+  dollars = raw.substring(0, raw.length - 2);
+  cents = "";
+}
+
+// --- Change this final line per layer ---
+dollars; // Dollar Layer
+// cents  // Cents Layer
+// unit   // Unit Layer</code></pre>
+      <p>I use the &ldquo;.&rdquo; to act as a break point between data. Any number before the . goes to the dollar place, the next two numbers go to the cents place, and the last two characters are placed into the unit section.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Woolies/Image03_PriceDiagram.png" alt="Diagram of the price string broken into dollars, cents and unit" loading="lazy"></figure>
+
+      <h3>Automatic Resizing and Spacing</h3>
+      <p>Going hand in hand with this was making the text resize and position itself correctly based on the type. A 1 in the dollar section is going to be shorter than 9 or 22 so I wanted the text to read their own dimensions and position themselves accordingly.</p>
+      <p>This was achieved by setting up a series of expressions in the x axis of each layer that read off the layer before them:</p>
+      <pre><code>//Dollar Position
+thisComp.layer("$").transform.xPosition+29+(thisLayer.sourceRectAtTime().width/2) + (thisComp.layer("MASTER NULL").effect("DOLLAR FINE TUNE")("Slider")*.1)
+
+//Cents Position
+thisComp.layer("DOLLARS").transform.position[0] + (thisComp.layer("DOLLARS").sourceRectAtTime().width/2) + (thisLayer.sourceRectAtTime().width/2) + 8 +(thisComp.layer("MASTER NULL").effect("CENTS FINE TUNE")("Slider")*.1);</code></pre>
+      <p>I start with the location of the $ and, moving from left to right, read the width of the dollar text and position the cents where they should be. The unit designator then reads the cents location and sits on its X but the dollars Y so everything is lined up and straight. When there isn&rsquo;t a cents (so for example the price is just 5 dollars not 5.10) the cents text turns invisible but its location placement is still known and the unit designator still places correctly.</p>
+      <p>Then in the master comp, when I swap in the price precomp, the whole precomp reads the layer&rsquo;s overall size and will scale it correctly.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Woolies/Image04_CirclePrice.png" alt="Master comp reading the price precomp's overall size" loading="lazy"></figure>
+      <p>It understands how long the total width of all the layers (and their spacing) is together and is able to determine an appropriate size to make it.</p>
+
+      <h3>Swappable Assets / Library Management</h3>
+      <p>These price comps all live in the template along with dozens of other assets that relate to product or special or value or type and depending on what the client wants to highlight one week or another. To make it quick and easy to go between them, I standardised the assets. Assets always come in different sizes and types but by making sure that all comps in the template were the same size across the various places they could be used.</p>
+      <p>Many designers feel like they need to make all their precomps either the size of output or size of asset. Please get out of that habit. You have the ability to make any precomp any size so find one that works for your template structure and design.</p>
+      <p>If you can just quickly change the product because all the product comps in the library are the same size, then it&rsquo;s not a matter of resizing or readjusting every time, it&rsquo;s just a matter of finding the asset and replacing it.</p>
+      <div class="cl-figrow cl-figrow--3">
+        <span class="cl-shot cl-shot--contain"><img src="Gallery/Case%20Study%20Images/Woolies/Image05_Food1.png" alt="Standardized product asset, example 1" loading="lazy"></span>
+        <span class="cl-shot cl-shot--contain"><img src="Gallery/Case%20Study%20Images/Woolies/Image06_Food2.png" alt="Standardized product asset, example 2" loading="lazy"></span>
+        <span class="cl-shot cl-shot--contain"><img src="Gallery/Case%20Study%20Images/Woolies/Image07_Food3.png" alt="Standardized product asset, example 3" loading="lazy"></span>
+      </div>
+      <p>I also set up what I called &ldquo;Rolling&rdquo; comps. These were for things like tags or markers that were needed for some assets. For example, on the fruit and veg, occasionally they would want to put where those items were sourced from so I had a precomp with all those tags in the right place and a slider control hooked up to that precomp that the user would be able to control. From there, they would be able to just use the slider to find the right asset right in the comp instead of hunting through the library.</p>
+      <div class="cl-two cl-two--framed">
+        <img src="Gallery/Case%20Study%20Images/Woolies/Image08_FoodSource1.png" alt="Rolling source-tag comp, option 1" loading="lazy">
+        <img src="Gallery/Case%20Study%20Images/Woolies/Image09_FoodSource2.png" alt="Rolling source-tag comp, option 2" loading="lazy">
+      </div>
+      <p>Organisation and automations mean that I was able to churn these sort of spots out and make changes quickly and efficiently without it disrupting my whole day.</p>
+      <p>This template was eventually paired with a couple other scripts I wrote like the WIP_maker and Broadcast_outputs scripts, which combined a bunch of tasks into a one-button experience. In the case of those two, the WIP_maker would instantly make and export WIPs for the clients in the right specs and the Broadcast_outputs would label and export the final approved spots in the right sizes and formats that were necessary for the various channels they would need to go to.</p>
+
+      <footer class="cl-footer"><span class="cl-foot-dot"></span>Supermarket Speed and Template Improvements</footer>
     </article>
   </template>
 </div>
