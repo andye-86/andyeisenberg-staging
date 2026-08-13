@@ -887,11 +887,11 @@ a{color:inherit;text-decoration:none}
             <p class="cc-excerpt">How naming conventions, automatic resizing, and standardized assets speed up production for weekly advertising.</p>
           </div>
         </article>
-        <article class="case-card" data-case="case-05">
-          <div class="cc-media"><span class="cc-ph">Case study</span></div>
+        <article class="case-card" data-case="fx-autodesigner">
+          <div class="cc-media"><img class="cc-thumb" src="Gallery/Case%20Study%20Images/FX/CoverImage.png" alt="FX AutoDesigner"></div>
           <div class="cc-body">
-            <h3 class="cc-title">Case study 05</h3>
-            <p class="cc-excerpt">A short breakdown of the project (the brief, the build, and what made it work) will live here.</p>
+            <h3 class="cc-title">FX AutoDesigner</h3>
+            <p class="cc-excerpt">FX AutoDesigner automates strict After Effects branding workflows, cutting promo production time from hours to minutes.</p>
           </div>
         </article>
         <article class="case-card" data-case="case-06">
@@ -1545,6 +1545,65 @@ thisComp.layer("DOLLARS").transform.position[0] + (thisComp.layer("DOLLARS").sou
       <p>This template was eventually paired with a couple other scripts I wrote like the WIP_maker and Broadcast_outputs scripts, which combined a bunch of tasks into a one-button experience. In the case of those two, the WIP_maker would instantly make and export WIPs for the clients in the right specs and the Broadcast_outputs would label and export the final approved spots in the right sizes and formats that were necessary for the various channels they would need to go to.</p>
 
       <footer class="cl-footer"><span class="cl-foot-dot"></span>Supermarket Speed and Template Improvements</footer>
+    </article>
+  </template>
+  <template data-case="fx-autodesigner">
+    <article class="case-article">
+      <span class="cl-eyebrow">FX Australia &middot; Case study</span>
+      <h2 class="cl-title">FX AutoDesigner</h2>
+      <div class="cl-topics"><span>After Effects</span><span>Automation</span></div>
+
+      <p class="cl-lead">FX AutoDesigner automates strict After Effects branding workflows, cutting promo production time from hours to minutes.</p>
+
+      <p>My first big role was as a senior designer at National Geographic Channel and FX Australia and after about a year on this job, after working with the FX Brand day in and day out, it dawned on me that this brand was not only incredibly well designed, but it was also very exact in how that design needed to be followed. From here, it became a bit of a quest to try and see how much of this design I could convert into automation and hence an &ldquo;AutoDesigner&rdquo; was born.</p>
+      <div class="cl-grid2">
+        <figure class="cl-img" style="margin:0"><img src="Gallery/Case%20Study%20Images/FX/Image1_Brand1.png" alt="FX brand example 1" loading="lazy"></figure>
+        <figure class="cl-img" style="margin:0"><img src="Gallery/Case%20Study%20Images/FX/Image2_Brand2.png" alt="FX brand example 2" loading="lazy"></figure>
+        <figure class="cl-img" style="margin:0"><img src="Gallery/Case%20Study%20Images/FX/Image3_Brand3.png" alt="FX brand example 3" loading="lazy"></figure>
+        <figure class="cl-img" style="margin:0"><img src="Gallery/Case%20Study%20Images/FX/Image4_Brand4.png" alt="FX brand example 4" loading="lazy"></figure>
+      </div>
+
+      <h3>Brand Guidelines</h3>
+      <p>The reason this was able to work was because FX has such strict branding requirements. Text always needed to be one of two fonts. Key messaging always had to appear in the center of the screen and text above the font needed to be left aligned and text below needed to be right aligned. There were only so many colors or textures that the background had to be and depending on the background, the text had to be a corresponding color. And so on and so on. After a while, these branding guidelines became second nature to me and while they were strict, this strictness lent itself to a system where software could interpret the design.</p>
+      <p>If key text always needs to be aligned in the middle of the screen, then the computer can find the exact center and put the text there. Why was I, the designer, doing something a piece of software could do faster?</p>
+      <figure class="cl-cell" style="margin:0 0 var(--space-5)">
+        <div class="cl-img" style="margin:0"><img src="Gallery/Case%20Study%20Images/FX/Image5_TextExample.png" alt="Raw text holder" loading="lazy"></div>
+        <figcaption>This is what a raw text holder looks like</figcaption>
+      </figure>
+
+      <h3>How to Build</h3>
+      <p>So, the first thing I did when I was planning to build this was to sit down and think about every single step I did from getting a promo cut from a producer to giving it back to the producer for review. What do I do first, second, third, etc? And I really needed to break this down. Even getting the cut into the program was more than just a simple one step. When broken down, it looked like this:</p>
+      <ol>
+        <li>Import the Video</li>
+        <li>Place the video into the correct folder in the Project Window</li>
+        <li>Make a Comp</li>
+        <li>Change the Comp size to match the video</li>
+        <li>Change the Comp duration to match the video</li>
+        <li>Name the Comp</li>
+        <li>Make it the Active Comp</li>
+        <li>Begin work on that edit</li>
+      </ol>
+      <p>That&rsquo;s eight steps before I even start the process, but when designing a program, one needs to look at every step, every small thing. And then, look through the steps and see what can be done and what can&rsquo;t be done.</p>
+
+      <h3>What Computers Do and What Users Do</h3>
+      <p>Once I got all the steps down, I started looking at what I could do and what the computer could do. Nowadays, with AI, it&rsquo;s probably easier to automate everything, but back when I was assembling this, I found a distinct place in the process where I, as a user, would have to intercede and offer my input. At the time, when we got promos from producers, we&rsquo;d get a full cut of the spot with black sections for places where we&rsquo;d put the supers, logos, endboards and any other graphics that were needed.</p>
+      <p>Because this was a video file, I as a human, could read where the black sections I needed to work on were but the computer could not. The computer could tell where a cut was but not what the cut meant. As a result of this, I broke the AutoDesigner into two parts, Part 1 and Part 2.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/FX/Image6_UI.png" alt="AutoDesigner interface" loading="lazy"></figure>
+      <p>Part 1 ran at the start of the sequence and took me up to the point where I would need to go in and point out where a super or graphic was supposed to go. I would then go in and tell the system, &ldquo;hey, this is where a super goes, this is where a logo goes, this is where the endboard goes,&rdquo; and then I would run part 2. Part 2 would read my notes about where a super or graphic would go (which I would mark via an adjustment layer&rsquo;s color) and then go in and for each graphic, ask me a series of questions depending on what graphic it was. For example, if it was a super, it would ask me what text gets put into the graphic:</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/FX/Image7_UI2.png" alt="AutoDesigner asking which graphic type" loading="lazy"></figure>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/FX/Image8_TextExample1.gif" alt="AutoDesigner asking for super text" loading="lazy"></figure>
+      <p>And then it would do all the other task necessary for me like making sure the text was aligned correctly, putting the right amount of overlap for each.</p>
+
+      <h3>Growth</h3>
+      <p>So, once I got this built and running properly, I was able to cut down on my time within After Effects immensely. It used to take around 3-4 hours to do a 60 second promo. But with this software, who could do all those things faster than I ever could, without having to go into the timeline, I was able to get that time down to about 15 minutes. It freed up my time to work on other projects, to take on my intricate design work and to refine this system. I added improvements into place like the ability to reskin a promo so we could easily see it in different color combinations and let a producer decide on the right direction.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/FX/Image8_TextExample1.gif" alt="Reskinned promo example 1" loading="lazy"></figure>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/FX/Image9_TextExample2.gif" alt="Reskinned promo example 2" loading="lazy"></figure>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/FX/Image10_TextExample3.gif" alt="Reskinned promo example 3" loading="lazy"></figure>
+      <p>From there, I would update the AutoDesigner as the brand evolved and changed. When we added new colors and styles into the brand, I&rsquo;d update the UI and the options.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/FX/Image11_UpdatedUI.png" alt="Updated AutoDesigner UI" loading="lazy"></figure>
+      <p>The AutoDesigner didn&rsquo;t replace me. It just got out of the way, so the time I used to spend on repetitive builds went straight back into the design work I actually wanted to be doing.</p>
+
+      <footer class="cl-footer"><span class="cl-foot-dot"></span>FX AutoDesigner</footer>
     </article>
   </template>
 </div>
