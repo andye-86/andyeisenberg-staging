@@ -894,11 +894,11 @@ a{color:inherit;text-decoration:none}
             <p class="cc-excerpt">FX AutoDesigner automates strict After Effects branding workflows, cutting promo production time from hours to minutes.</p>
           </div>
         </article>
-        <article class="case-card" data-case="case-06">
-          <div class="cc-media"><span class="cc-ph">Case study</span></div>
+        <article class="case-card" data-case="emerald-cruises-and-tours-opening">
+          <div class="cc-media"><img class="cc-thumb" src="Gallery/Case%20Study%20Images/Emerald/CoverImage.png" alt="Emerald Cruises & Tours Opening"></div>
           <div class="cc-body">
-            <h3 class="cc-title">Case study 06</h3>
-            <p class="cc-excerpt">A short breakdown of the project (the brief, the build, and what made it work) will live here.</p>
+            <h3 class="cc-title">Emerald Cruises &amp; Tours Opening</h3>
+            <p class="cc-excerpt">A guide to creating an After Effects MOGRT using a master null for colors and sliders, rounded controls, configurable transitions, and a streamlined Essential Graphics UI.</p>
           </div>
         </article>
       </div>
@@ -1604,6 +1604,92 @@ thisComp.layer("DOLLARS").transform.position[0] + (thisComp.layer("DOLLARS").sou
       <p>The AutoDesigner didn&rsquo;t replace me. It just got out of the way, so the time I used to spend on repetitive builds went straight back into the design work I actually wanted to be doing.</p>
 
       <footer class="cl-footer"><span class="cl-foot-dot"></span>FX AutoDesigner</footer>
+    </article>
+  </template>
+  <template data-case="emerald-cruises-and-tours-opening">
+    <article class="case-article">
+      <span class="cl-eyebrow">Emerald &middot; Case study</span>
+      <h2 class="cl-title">Emerald Cruises &amp; Tours Opening</h2>
+      <div class="cl-topics"><span>After Effects</span><span>Template</span><span>Automation</span></div>
+
+      <p class="cl-lead">A guide to creating an After Effects MOGRT using a master null for colors and sliders, rounded controls, configurable transitions, and a streamlined Essential Graphics UI.</p>
+
+      <p>Let&rsquo;s talk about a standard process of building out a MOGRT because I haven&rsquo;t done that in a while and there&rsquo;s some new techniques that I&rsquo;ve updated and this opening graphic is a pretty good example of a lot of those techniques. Here, I have this opening graphic I built that the client wanted some options for.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Emerald/Image1_FullAnimation.gif" alt="Full opening animation" loading="lazy"></figure>
+      <p>The brief was very straightforward. They wanted their logo animated in at the start and then transition through the little gem icon into a piece of footage. Sometimes that footage needed to have the glass panel transition wings on the side or the tag on the top or both and they wanted to be able to control the color. Pretty simple and easy so here&rsquo;s how I did it.</p>
+
+      <h3>Master Null</h3>
+      <p>Something I&rsquo;ve been doing for ages, and I still think it&rsquo;s a good idea, is using a Master Null for the properties I&rsquo;ll be using in the essential graphics panel.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Emerald/Image2_MasterNull.png" alt="Master Null on the timeline" loading="lazy"></figure>
+      <p>This is usually a bright pink (Fuchsia label) null that sits on the top of the timeline. It keeps things straight for me and enables me to keep things clean and organised so I don&rsquo;t have to go looking around for properties later on when I go to add them to the UI panel. Organization saves time and sanity.</p>
+      <p>One of the things I have also started doing in these master nulls is holding brand colors directly in them. You&rsquo;ll see here, I took the 3 main brand colors and have them stored here in this master Null.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Emerald/Image3_MasterNull_Colors.png" alt="Brand colors stored in the Master Null" loading="lazy"></figure>
+      <p>I do this now so I have the colors where I need them in an easy reference location, the color picker is notoriously unreliable, and (and this is my new favorite thing) because they are stored this way, they are accessible via expressions. Instead of having to program the colors in to every asset where color can be changed, I can write a master expression like this:</p>
+      <pre><code>switch (
+  thisComp.layer("MASTER NULL").effect("Slider Control")("Slider").value
+) {
+  case 1:
+    thisComp.layer("MASTER NULL").effect("White")("Color");
+    break;
+  case 2:
+    thisComp.layer("MASTER NULL").effect("Black")("Color");
+    break;
+  case 3:
+    thisComp.layer("MASTER NULL").effect("Emerald")("Color");
+    break;
+  case 4:
+    thisComp.layer("MASTER NULL").effect("White")("Color");
+    break;
+  default:
+    thisComp.layer("MASTER NULL").effect("Emerald")("Color");
+    break;
+}</code></pre>
+      <p>And then just change the case numbers for the right combination. No more memorizing hex codes or, even worse, changing all colors at the end because a brand team has had &ldquo;second thoughts on the exact shade of mustard&rdquo; (that&rsquo;s an exact quote that has been said to me.) This links all the colors back to a central location and that can be updated on the fly. This brand had 4 colors combinations so that was rigged up and allowed the user to quickly go between them.</p>
+      <div class="cl-grid2">
+        <figure class="cl-img" style="margin:0"><img src="Gallery/Case%20Study%20Images/Emerald/Image4_Brand1.png" alt="Brand color combination 1" loading="lazy"></figure>
+        <figure class="cl-img" style="margin:0"><img src="Gallery/Case%20Study%20Images/Emerald/Image5_Brand2.png" alt="Brand color combination 2" loading="lazy"></figure>
+        <figure class="cl-img" style="margin:0"><img src="Gallery/Case%20Study%20Images/Emerald/Image6_Brand3.png" alt="Brand color combination 3" loading="lazy"></figure>
+        <figure class="cl-img" style="margin:0"><img src="Gallery/Case%20Study%20Images/Emerald/Image7_Brand4.png" alt="Brand color combination 4" loading="lazy"></figure>
+      </div>
+      <p>One other things I&rsquo;d like to make a note of here is the use of a Math.round() expression in this null for slider controls.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Emerald/Image8_SliderControl.png" alt="Math.round() expression on the slider control" loading="lazy"></figure>
+      <p>This is a quality of life improvement that makes me it so all slider controls will return round numbers. Sometimes, in the Essential Graphics panel, the slider control will come to rest at like 3.4 but because I write my expressions to catch whole numbers with the switch, that won&rsquo;t trigger it so I&rsquo;ll go back to the default. Using the Math.round() on the slider itself makes sure that the slider always returns a correct number.</p>
+
+      <h3>Transition</h3>
+      <p>The client wanted the transitions out to have a few options:</p>
+      <ul>
+        <li>Go to Footage
+          <ul>
+            <li>with a Tag (optional)</li>
+            <li>with glass panel effect</li>
+            <li>with both</li>
+          </ul>
+        </li>
+        <li>Go to transparent (so editor can have more control over the timing and shot)
+          <ul>
+            <li>with a Tag (optional)</li>
+          </ul>
+        </li>
+      </ul>
+      <p>So, that&rsquo;s what I needed to plan out and honestly, not too hard. This became a layer order question. That tag was needed on both major options so I put that at the top of the stacking order. Then I knew that the those glass panels were going to be done via adjustment layers so I was going to have to put those layers above the footage layer.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Emerald/Image9_LayerStack.png" alt="Layer stacking order" loading="lazy"></figure>
+      <p>And for the transparent, that&rsquo;s actually super easy to do. I just hooked up a solid layer with a silhouette alpha blending mode whose transparency was controlled by a checkbox control.</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Emerald/Image10_LayerStack_withSolid.png" alt="Layer stack with the solid layer added" loading="lazy"></figure>
+      <p>When that box was checked, the layer was visible and everything under it would be invisible. I placed that layer between where the tag was and where the glass panels and footage was.</p>
+      <div class="cl-grid2">
+        <figure class="cl-cell"><span class="cl-shot cl-shot--contain"><img src="Gallery/Case%20Study%20Images/Emerald/Image11_withFootage.png" alt="With the checkbox off" loading="lazy"></span><figcaption>With the Checkbox off</figcaption></figure>
+        <figure class="cl-cell"><span class="cl-shot cl-shot--contain"><img src="Gallery/Case%20Study%20Images/Emerald/Image12_withoutFootage.png" alt="With the checkbox on" loading="lazy"></span><figcaption>With the Checkbox on</figcaption></figure>
+      </div>
+
+      <h3>UI Design</h3>
+      <p>Now that I&rsquo;ve got this all working, When I go to rig this up to the Essential Graphics Panel, follow a few rules with regard to the layout. I always try to place myself in the seat of an editor who&rsquo;s going to be using this graphic. I want to enable that person (who will almost certainly not be a Motion Designer) to have enough control over but also have the UI simple enough so that they are not overwhelmed by the amount of options. You&rsquo;ll see with this one:</p>
+      <figure class="cl-img"><img src="Gallery/Case%20Study%20Images/Emerald/Image13_EssentailGraphics.png" alt="Essential Graphics panel layout" loading="lazy"></figure>
+      <p>I don&rsquo;t have color options as a color picker or separate options for each element. I have the whole color scheme hardcoded into a slider control. The brand has locked down the colors so there&rsquo;s only so many options and those options are already decided for us so I just hooked this up to a slider and now that one control affects all the color options in this piece. Take away redundant controls if you can.</p>
+      <p>Next, I have the option to show or hide the tag. It&rsquo;s just a simple checkbox control but I make sure to label it clearly. I don&rsquo;t just have &ldquo;Tag.&rdquo; I have &ldquo;Include Tag&rdquo; so the editor knows exactly what this does. Be clear with your descriptions.</p>
+      <p>And below that I have a group that I&rsquo;ve added for the controls of the glass panels. Sometimes I use groups for like properties (like if there&rsquo;s a brand with freer use of color, I&rsquo;ll put all the color properties in a group) or, like in this case, I&rsquo;ll use groups to put options for an element into a section. This group is for whether the glass panel transition is active or not and what that footage is. Both those options are under the group.</p>
+      <p>Mostly with these sort of graphics, keeping things neat, organised and easy to use is how to get your editors to actually use them (and not hate you in the process).</p>
+
+      <footer class="cl-footer"><span class="cl-foot-dot"></span>Emerald Cruises &amp; Tours Opening</footer>
     </article>
   </template>
 </div>
